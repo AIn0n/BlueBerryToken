@@ -51,3 +51,18 @@ public class Block
     public byte[] getPrevHash() { return prevHash; }
     public void setPrevHash(byte[] hash) { this.prevHash = hash; }
 }
+
+//not sure for how long this class will be useful, if I will use it more than for debugging
+//i create new file for it
+class HashingUtility
+{
+    public static String ByteListToString(byte[] bytes)
+    {
+        StringBuilder sb = new StringBuilder();
+        for(byte b: bytes)
+        {
+            sb.append(String.format("%02x", b));
+        }
+        return sb.toString();
+    }
+}

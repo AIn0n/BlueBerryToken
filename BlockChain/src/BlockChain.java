@@ -16,4 +16,21 @@ public class BlockChain
         block.setPrevHash(lastBlockHash);
         blocks.add(block);
     }
+
+    public static void main(String[] args)
+    {
+        StrData initData = new StrData("foo");
+        BlockChain bc = new BlockChain(initData);
+
+    }
+}
+
+class StrData implements Datable
+{
+    private final String string;
+
+    StrData(String str) { this.string = str; }
+
+    @Override
+    public byte[] getBytes() { return this.string.getBytes(); }
 }
