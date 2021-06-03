@@ -22,20 +22,15 @@ public class Block
         this.calculateHash();
     }
 
-    private byte[] convertDataAndPrevHashToBytes()
+    private byte[] convertToBytes()
     {
-        if(this.prevHash != null)   //in case of genesis block we do not have any kind of prevHash
-        {
-        //all of code here is just two bytes lists concat
-            byte[] dataAsBytes = this.data.getBytes();
-            byte[] bytes = new byte[dataAsBytes.length + this.prevHash.length];
-
-            System.arraycopy(dataAsBytes, 0, bytes, 0, dataAsBytes.length);
-            System.arraycopy(this.prevHash, 0, bytes, dataAsBytes.length, this.prevHash.length);
-
-            return bytes;
-        }
-        return this.data.getBytes();
+        byte[] result = HashingUtility.concatByteLists(
+                this.data.getBytes(),
+                HashingUtility.longToByteList(this.index)
+        );
+    //in case of genesis block we do not have any kind of prevHash
+        if(this.prevHash != null) result = HashingUtility.concatByteLists(result, this.prevHash);
+        return result;
     }
 
     void calculateHash()
@@ -43,18 +38,21 @@ public class Block
         try
         {
             MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-            this.hash = sha256.digest(this.convertDataAndPrevHashToBytes());
+            this.hash = sha256.digest(this.convertToBytes());
         }
         catch (java.security.NoSuchAlgorithmException e) { e.printStackTrace(); }
     }
 
     void printBlock()
     {
-        System.out.println("message: " + this.data + "\nindex: " + this.index);
-        System.out.print("hash: "); HashingUtility.printHash(this.hash);
-        System.out.print("prev hash: ");
-        if(this.prevHash != null) HashingUtility.printHash(this.prevHash);
-        System.out.println("\n");
+        System.out.println(
+            "message: " + this.data +
+            "\nindex: " + this.index +
+            "\nhash: " + HashingUtility.byteListToString(this.hash));
+
+        if(this.prevHash != null)
+            System.out.println("prev hash: " + HashingUtility.byteListToString(this.prevHash));
+        System.out.println();
     }
 
     public byte[] getHash() { return hash; }
@@ -67,12 +65,41 @@ public class Block
 //i create new file for it
 class HashingUtility
 {
-    public static String ByteListToString(byte[] bytes)
+    public static String byteListToString(byte[] bytes)
     {
         StringBuilder sb = new StringBuilder();
         for(byte b: bytes) { sb.append(String.format("%02x", b)); }
         return sb.toString();
     }
 
-    public static void printHash(byte[] bytes) { System.out.println(ByteListToString(bytes)); }
+    public static long byteListToLong(byte[] bytes)
+    {
+        long result = 0;
+        for(int i = 0; i < Long.BYTES; ++i)
+        {
+            result <<= Byte.SIZE;
+            result |= (bytes[i] & 0xFF);
+        }
+        return result;
+    }
+
+    public static byte[] longToByteList(long value)
+    {
+        byte[] result = new byte[Long.BYTES];
+        for(int i = Long.BYTES - 1; i > -1; --i)
+        {
+            result[i] = (byte)(value & 0xFF);
+            value >>= Byte.SIZE;
+        }
+        return result;
+    }
+
+    public static byte[] concatByteLists(byte[] first, byte[] second)
+    {
+        byte[] result = new byte[first.length + second.length];
+        System.arraycopy(first, 0, result, 0, first.length);
+        System.arraycopy(second, 0, result, first.length, second.length);
+
+        return result;
+    }
 }
