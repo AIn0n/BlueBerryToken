@@ -5,6 +5,7 @@ public class Block
     private final Datable data;
     private byte[] hash;
     private byte[] prevHash;
+    private long index;
 
     Block(Datable data, byte[] prevHash)
     {
@@ -47,9 +48,19 @@ public class Block
         catch (java.security.NoSuchAlgorithmException e) { e.printStackTrace(); }
     }
 
+    void printBlock()
+    {
+        System.out.println("message: " + this.data + "\nindex: " + this.index);
+        System.out.print("hash: "); HashingUtility.printHash(this.hash);
+        System.out.print("prev hash: ");
+        if(this.prevHash != null) HashingUtility.printHash(this.prevHash);
+        System.out.println("\n");
+    }
+
     public byte[] getHash() { return hash; }
-    public byte[] getPrevHash() { return prevHash; }
     public void setPrevHash(byte[] hash) { this.prevHash = hash; }
+    public void setIndex(long index) {this.index = index; }
+    public long getIndex() { return this.index; }
 }
 
 //not sure for how long this class will be useful, if I will use it more than for debugging
@@ -59,10 +70,9 @@ class HashingUtility
     public static String ByteListToString(byte[] bytes)
     {
         StringBuilder sb = new StringBuilder();
-        for(byte b: bytes)
-        {
-            sb.append(String.format("%02x", b));
-        }
+        for(byte b: bytes) { sb.append(String.format("%02x", b)); }
         return sb.toString();
     }
+
+    public static void printHash(byte[] bytes) { System.out.println(ByteListToString(bytes)); }
 }

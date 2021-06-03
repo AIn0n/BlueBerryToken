@@ -1,1 +1,5 @@
-public interface Datable { byte[] getBytes();}
+public interface Datable
+{
+    byte[] getBytes();
+    void convertFromBytes(byte[] bytes);
+}

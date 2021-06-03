@@ -1,6 +1,7 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 
-public class BlockChain
+public class BlockChain implements Iterable<Block>
 {
     ArrayList<Block> blocks;
 
@@ -10,10 +11,14 @@ public class BlockChain
         this.blocks.add(new Block(initData, null));
     }
 
+    @Override
+    public Iterator<Block> iterator() { return blocks.iterator(); }
+
     void add(Block block)
     {
-        byte[] lastBlockHash = this.blocks.get(this.blocks.size() - 1).getHash();
-        block.setPrevHash(lastBlockHash);
+        Block lastBlock = this.blocks.get(this.blocks.size() - 1);
+        block.setPrevHash(lastBlock.getHash());
+        block.setIndex(lastBlock.getIndex() + 1);
         blocks.add(block);
     }
 
@@ -21,16 +26,23 @@ public class BlockChain
     {
         StrData initData = new StrData("foo");
         BlockChain bc = new BlockChain(initData);
+        bc.add(new Block(new StrData("bar")));
 
+        for (Block block : bc) { block.printBlock(); }
     }
 }
 
 class StrData implements Datable
 {
-    private final String string;
+    private String string;
 
     StrData(String str) { this.string = str; }
 
     @Override
     public byte[] getBytes() { return this.string.getBytes(); }
+
+    @Override
+    public void convertFromBytes(byte[] bytes) { this.string = new String(bytes); }
+
+    public String toString() { return this.string; }
 }
