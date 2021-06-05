@@ -34,17 +34,15 @@ public class BlockChain implements Iterable<Block>
     }
 }
 
+//testing only class - not for production code
 class StrData implements Datable
 {
-    private String string;
+    private final String string;
 
     StrData(String str) { this.string = str; }
 
     @Override
     public byte[] getBytes() { return this.string.getBytes(); }
-
-    @Override
-    public void convertFromBytes(byte[] bytes) { this.string = new String(bytes); }
 
     public String toString() { return this.string; }
 }
