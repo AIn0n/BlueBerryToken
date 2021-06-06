@@ -9,6 +9,7 @@ public class Block
     private byte[] hash;
     private byte[] prevHash;
     private long index;
+    private long nonce;
 
     Block(Datable data, byte[] prevHash)
     {
@@ -31,6 +32,7 @@ public class Block
                 this.data.getBytes(),
                 HashingUtility.longToByteList(this.index)
         );
+        result = HashingUtility.concatByteLists(result, HashingUtility.longToByteList(this.nonce));
     //in case of genesis block we do not have any kind of prevHash
         if(this.prevHash != null) result = HashingUtility.concatByteLists(result, this.prevHash);
         return result;
