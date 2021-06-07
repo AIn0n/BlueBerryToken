@@ -1,32 +1,34 @@
 package BlockChain;
 
+import BlockChain.Blocks.StdBlock;
+import BlockChain.Blocks.Datable;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class BlockChain implements Iterable<Block>
+public class BlockChain implements Iterable<StdBlock>
 {
-    ArrayList<Block> blocks;
+    ArrayList<StdBlock> blocks;
 
     public BlockChain(Datable initData)
     {
         this.blocks = new ArrayList<>();
-        this.blocks.add(new Block(initData));
+        this.blocks.add(new StdBlock(initData));
     }
 
     @Override
-    public Iterator<Block> iterator() { return blocks.iterator(); }
+    public Iterator<StdBlock> iterator() { return blocks.iterator(); }
 
-    public void add(Block block) { blocks.add(block); }
+    public void add(StdBlock block) { blocks.add(block); }
 
-    public Block last() { return this.blocks.get(this.blocks.size() - 1); }
+    public StdBlock last() { return this.blocks.get(this.blocks.size() - 1); }
 
     public static void main(String[] args)
     {
         StrData initData = new StrData("foo");
         BlockChain bc = new BlockChain(initData);
-        bc.add(new Block(new StrData("bar")));
+        bc.add(new StdBlock(new StrData("bar")));
 
-        for (Block block : bc) { block.printBlock(); }
+        for (StdBlock block : bc) { block.printBlock(); }
     }
 }
-

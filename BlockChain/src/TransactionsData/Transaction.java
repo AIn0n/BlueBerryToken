@@ -1,6 +1,6 @@
 package TransactionsData;
 
-import BlockChain.Datable;
+import BlockChain.Blocks.Datable;
 import HashingUtility.HashingUtility;
 
 import java.security.*;

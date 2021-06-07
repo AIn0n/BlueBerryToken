@@ -1,6 +1,8 @@
 package Miner;
 
 import BlockChain.*;
+import BlockChain.Blocks.StdBlock;
+import BlockChain.Blocks.Datable;
 import HashingUtility.HashingUtility;
 
 import java.security.*;
@@ -11,9 +13,9 @@ public class Miner {
 
     public Miner(PublicKey pk){this.miner = pk;}
 
-    public Block mine(Datable data, Block prevBlock)
+    public StdBlock mine(Datable data, StdBlock prevBlock)
     {
-        Block result = new Block(data, prevBlock, this.miner);
+        StdBlock result = new StdBlock(data, prevBlock, this.miner);
         int i = 0;
         do
         {
@@ -38,11 +40,11 @@ public class Miner {
             KeyGen.initialize(1024);
             KeyPair pair = KeyGen.genKeyPair();
             Miner miner = new Miner(pair.getPublic());
-            Block blockToDig = miner.mine(new StrData("bar"), bc.last());
+            StdBlock blockToDig = miner.mine(new StrData("bar"), bc.last());
             bc.add(blockToDig);
         }
         catch (NoSuchAlgorithmException | NoSuchProviderException e) {e.printStackTrace();}
 
-        for (Block block : bc) { block.printBlock(); }
+        for (StdBlock block : bc) { block.printBlock(); }
     }
 }

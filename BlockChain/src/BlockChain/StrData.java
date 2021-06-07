@@ -1,5 +1,7 @@
 package BlockChain;
 
+import BlockChain.Blocks.Datable;
+
 //testing only class - not for production code
 public class StrData implements Datable {
     private final String string;

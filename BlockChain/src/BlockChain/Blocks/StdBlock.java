@@ -1,29 +1,20 @@
-package BlockChain;
+package BlockChain.Blocks;
 
 import java.security.MessageDigest;
 import java.security.PublicKey;
 
 import HashingUtility.HashingUtility;
 
-public class Block
+public class StdBlock extends Block
 {
     private final byte[] prevHash;
     private final long index;
     private final Datable data;
     private byte[] hash;
     private long nonce = 0;
-    private PublicKey miner;
+    private final PublicKey miner;
 
-//genesis block - custom constructor or new class extending Block?
-    public Block(Datable data, byte[] prevHash)
-    {
-        this.data = data;
-        this.prevHash = prevHash;
-        this.index = 0;
-        this.calculateHash();
-    }
-
-    public Block(Datable data, Block prevBlock, PublicKey miner)
+    public StdBlock(Datable data, Block prevBlock, PublicKey miner)
     {
         this.data = data;
         this.prevHash = prevBlock.getHash();
@@ -32,7 +23,7 @@ public class Block
     }
 
 //ask about this or null option
-    public Block(Datable data)
+    public StdBlock(Datable data)
     {
         this.data = data;
         this.prevHash = HashingUtility.longToByteList(0);
@@ -74,8 +65,5 @@ public class Block
         System.out.println();
     }
 
-    public byte[] getHash() { return hash; }
     public void setNonce(long nonce) {this.nonce = nonce;}
-    public long getIndex() { return this.index; }
 }
-
