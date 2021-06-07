@@ -7,22 +7,27 @@ public class BlockChain implements Iterable<Block>
 {
     ArrayList<Block> blocks;
 
-    BlockChain(Datable initData)
+    public BlockChain(Datable initData)
     {
         this.blocks = new ArrayList<>();
-        this.blocks.add(new Block(initData, null));
+        this.blocks.add(new Block(initData, null, 0));
     }
 
     @Override
     public Iterator<Block> iterator() { return blocks.iterator(); }
 
-    void add(Block block)
+    public void add(Block block)
     {
-        Block lastBlock = this.blocks.get(this.blocks.size() - 1);
+        Block lastBlock = this.getLastBlock();
         block.setPrevHash(lastBlock.getHash());
         block.setIndex(lastBlock.getIndex() + 1);
         blocks.add(block);
     }
+
+    private Block getLastBlock() { return this.blocks.get(this.blocks.size() - 1); }
+
+    public byte[] getLastHash() { return this.getLastBlock().getHash(); }
+    public long getLastIndex() { return this.getLastBlock().getIndex(); }
 
     public static void main(String[] args)
     {
@@ -34,15 +39,3 @@ public class BlockChain implements Iterable<Block>
     }
 }
 
-//testing only class - not for production code
-class StrData implements Datable
-{
-    private final String string;
-
-    StrData(String str) { this.string = str; }
-
-    @Override
-    public byte[] getBytes() { return this.string.getBytes(); }
-
-    public String toString() { return this.string; }
-}

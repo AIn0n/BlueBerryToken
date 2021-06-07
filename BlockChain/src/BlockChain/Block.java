@@ -11,19 +11,22 @@ public class Block
     private long index;
     private long nonce;
 
-    Block(Datable data, byte[] prevHash)
+    public Block(Datable data, byte[] prevHash, long idx)
     {
         this.data = data;
         this.prevHash = prevHash;
         this.calculateHash();
+        this.nonce = 0;
+        this.index = idx;
     }
 
 //ask about this or null option
-    Block(Datable data)
+    public Block(Datable data)
     {
         this.data = data;
         this.prevHash = null;
         this.calculateHash();
+        this.nonce = 0;
     }
 
     private byte[] convertToBytes()
@@ -38,7 +41,7 @@ public class Block
         return result;
     }
 
-    void calculateHash()
+    public void calculateHash()
     {
         try
         {
@@ -48,7 +51,7 @@ public class Block
         catch (java.security.NoSuchAlgorithmException e) { e.printStackTrace(); }
     }
 
-    void printBlock()
+    public void printBlock()
     {
         System.out.println(
             "message: " + this.data +
@@ -62,6 +65,7 @@ public class Block
 
     public byte[] getHash() { return hash; }
     public void setPrevHash(byte[] hash) { this.prevHash = hash; }
+    public void setNonce(long nonce) {this.nonce = nonce;}
     public void setIndex(long index) {this.index = index; }
     public long getIndex() { return this.index; }
 }
