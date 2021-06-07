@@ -29,11 +29,21 @@ public class HashingUtility {
         return result;
     }
 
-    public static byte[] concatByteLists(byte[] first, byte[] second) {
+    private static byte[] concatTwoByteLists(byte[] first, byte[] second) {
         byte[] result = new byte[first.length + second.length];
         System.arraycopy(first, 0, result, 0, first.length);
         System.arraycopy(second, 0, result, first.length, second.length);
 
+        return result;
+    }
+
+    public static byte[] concatByteLists(byte[]... args)
+    {
+        byte[] result = new byte[0];
+        for(byte[] arg: args)
+        {
+            result = concatTwoByteLists(result, arg);
+        }
         return result;
     }
 }

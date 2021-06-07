@@ -10,24 +10,15 @@ public class BlockChain implements Iterable<Block>
     public BlockChain(Datable initData)
     {
         this.blocks = new ArrayList<>();
-        this.blocks.add(new Block(initData, null, 0));
+        this.blocks.add(new Block(initData, null));
     }
 
     @Override
     public Iterator<Block> iterator() { return blocks.iterator(); }
 
-    public void add(Block block)
-    {
-        Block lastBlock = this.getLastBlock();
-        block.setPrevHash(lastBlock.getHash());
-        block.setIndex(lastBlock.getIndex() + 1);
-        blocks.add(block);
-    }
+    public void add(Block block) { blocks.add(block); }
 
-    private Block getLastBlock() { return this.blocks.get(this.blocks.size() - 1); }
-
-    public byte[] getLastHash() { return this.getLastBlock().getHash(); }
-    public long getLastIndex() { return this.getLastBlock().getIndex(); }
+    public Block last() { return this.blocks.get(this.blocks.size() - 1); }
 
     public static void main(String[] args)
     {

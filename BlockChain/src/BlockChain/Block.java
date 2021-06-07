@@ -1,23 +1,34 @@
 package BlockChain;
 
 import java.security.MessageDigest;
+import java.security.PublicKey;
+
 import HashingUtility.HashingUtility;
 
 public class Block
 {
+    private final byte[] prevHash;
+    private final long index;
     private final Datable data;
     private byte[] hash;
-    private byte[] prevHash;
-    private long index;
-    private long nonce;
+    private long nonce = 0;
+    private PublicKey miner;
 
-    public Block(Datable data, byte[] prevHash, long idx)
+//genesis block - custom constructor or new class extending Block?
+    public Block(Datable data, byte[] prevHash)
     {
         this.data = data;
         this.prevHash = prevHash;
+        this.index = 0;
         this.calculateHash();
-        this.nonce = 0;
-        this.index = idx;
+    }
+
+    public Block(Datable data, Block prevBlock, PublicKey miner)
+    {
+        this.data = data;
+        this.prevHash = prevBlock.getHash();
+        this.index = prevBlock.getIndex() + 1;
+        this.miner = miner;
     }
 
 //ask about this or null option
@@ -25,19 +36,22 @@ public class Block
     {
         this.data = data;
         this.prevHash = null;
+        this.index = 0;
         this.calculateHash();
-        this.nonce = 0;
     }
 
     private byte[] convertToBytes()
     {
         byte[] result = HashingUtility.concatByteLists(
-                this.data.getBytes(),
-                HashingUtility.longToByteList(this.index)
+            HashingUtility.longToByteList(this.index),
+            HashingUtility.longToByteList(this.nonce),
+            this.data.getBytes()
         );
-        result = HashingUtility.concatByteLists(result, HashingUtility.longToByteList(this.nonce));
     //in case of genesis block we do not have any kind of prevHash
-        if(this.prevHash != null) result = HashingUtility.concatByteLists(result, this.prevHash);
+        if(this.prevHash != null)
+        {
+            result = HashingUtility.concatByteLists(result, this.prevHash, this.miner.getEncoded());
+        }
         return result;
     }
 
@@ -64,9 +78,7 @@ public class Block
     }
 
     public byte[] getHash() { return hash; }
-    public void setPrevHash(byte[] hash) { this.prevHash = hash; }
     public void setNonce(long nonce) {this.nonce = nonce;}
-    public void setIndex(long index) {this.index = index; }
     public long getIndex() { return this.index; }
 }
 
