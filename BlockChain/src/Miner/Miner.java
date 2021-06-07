@@ -1,9 +1,6 @@
 package Miner;
 
-import BlockChain.Block;
-import BlockChain.BlockChain;
-import BlockChain.Datable;
-import BlockChain.StrData;
+import BlockChain.*;
 import HashingUtility.HashingUtility;
 
 import java.security.*;
@@ -24,7 +21,7 @@ public class Miner {
             result.calculateHash();
             System.out.println("hash: " + HashingUtility.byteListToString(result.getHash()));   //debug
         }
-        while(result.getHash()[0] != 0x12);
+        while(result.getHash()[0] != 0x77);
 
         return result;
     }

@@ -35,7 +35,8 @@ public class Block
     public Block(Datable data)
     {
         this.data = data;
-        this.prevHash = null;
+        this.prevHash = HashingUtility.longToByteList(0);
+        this.miner = null;
         this.index = 0;
         this.calculateHash();
     }
@@ -45,13 +46,11 @@ public class Block
         byte[] result = HashingUtility.concatByteLists(
             HashingUtility.longToByteList(this.index),
             HashingUtility.longToByteList(this.nonce),
-            this.data.getBytes()
+            this.data.getBytes(),
+            this.prevHash
         );
-    //in case of genesis block we do not have any kind of prevHash
-        if(this.prevHash != null)
-        {
-            result = HashingUtility.concatByteLists(result, this.prevHash, this.miner.getEncoded());
-        }
+    //in case of genesis block we do not have any kind of prevHash or miner
+        if(this.miner != null) result = HashingUtility.concatByteLists(result, this.miner.getEncoded());
         return result;
     }
 
@@ -70,10 +69,8 @@ public class Block
         System.out.println(
             "message: " + this.data +
             "\nindex: " + this.index +
-            "\nhash: " + HashingUtility.byteListToString(this.hash));
-
-        if(this.prevHash != null)
-            System.out.println("prev hash: " + HashingUtility.byteListToString(this.prevHash));
+            "\nhash: " + HashingUtility.byteListToString(this.hash) +
+            "\nprev hash: " + HashingUtility.byteListToString(this.prevHash));
         System.out.println();
     }
 

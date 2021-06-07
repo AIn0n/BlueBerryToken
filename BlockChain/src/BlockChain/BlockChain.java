@@ -10,7 +10,7 @@ public class BlockChain implements Iterable<Block>
     public BlockChain(Datable initData)
     {
         this.blocks = new ArrayList<>();
-        this.blocks.add(new Block(initData, null));
+        this.blocks.add(new Block(initData));
     }
 
     @Override
