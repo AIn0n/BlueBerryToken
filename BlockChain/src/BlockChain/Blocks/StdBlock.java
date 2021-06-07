@@ -8,11 +8,8 @@ import HashingUtility.HashingUtility;
 public class StdBlock extends Block
 {
     private final byte[] prevHash;
-    private final long index;
-    private final Datable data;
-    private byte[] hash;
-    private long nonce = 0;
     private final PublicKey miner;
+    private long nonce = 0;
 
     public StdBlock(Datable data, Block prevBlock, PublicKey miner)
     {
@@ -22,47 +19,35 @@ public class StdBlock extends Block
         this.miner = miner;
     }
 
-//ask about this or null option
-    public StdBlock(Datable data)
-    {
-        this.data = data;
-        this.prevHash = HashingUtility.longToByteList(0);
-        this.miner = null;
-        this.index = 0;
-        this.calculateHash();
-    }
-
     private byte[] convertToBytes()
     {
-        byte[] result = HashingUtility.concatByteLists(
+        return HashingUtility.concatByteLists(
             HashingUtility.longToByteList(this.index),
             HashingUtility.longToByteList(this.nonce),
             this.data.getBytes(),
+            this.miner.getEncoded(),
             this.prevHash
         );
-    //in case of genesis block we do not have any kind of prevHash or miner
-        if(this.miner != null) result = HashingUtility.concatByteLists(result, this.miner.getEncoded());
-        return result;
     }
 
     public void calculateHash()
     {
         try
         {
-            MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
-            this.hash = sha256.digest(this.convertToBytes());
+            this.hash = MessageDigest
+                    .getInstance("SHA-256")
+                    .digest(this.convertToBytes());
         }
         catch (java.security.NoSuchAlgorithmException e) { e.printStackTrace(); }
     }
 
-    public void printBlock()
+    public String toString()
     {
-        System.out.println(
-            "message: " + this.data +
-            "\nindex: " + this.index +
-            "\nhash: " + HashingUtility.byteListToString(this.hash) +
-            "\nprev hash: " + HashingUtility.byteListToString(this.prevHash));
-        System.out.println();
+        return (
+            "message: "     + this.data +
+            "\nindex: "     + this.index +
+            "\nhash: "      + HashingUtility.byteListToString(this.hash) +
+            "\nprev hash: " + HashingUtility.byteListToString(this.prevHash) + '\n');
     }
 
     public void setNonce(long nonce) {this.nonce = nonce;}

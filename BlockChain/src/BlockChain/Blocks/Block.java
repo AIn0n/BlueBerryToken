@@ -2,11 +2,11 @@ package BlockChain.Blocks;
 
 import java.io.Serializable;
 
-abstract class Block implements Serializable {
-    private byte[] hash;
-    private long index;
-    private Datable data;
-    abstract void calculateHash();
+abstract public class Block implements Serializable {
+    protected byte[] hash;
+    protected long index;
+    protected Datable data;
+    public abstract void calculateHash();
     public byte[] getHash() { return this.hash; }
     public long getIndex() { return this.index; }
 }
