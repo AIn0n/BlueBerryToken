@@ -13,12 +13,14 @@ public class KeyTree<DataType> implements Iterable<DataType>
     }
 
     @Override
-    public Iterator<DataType> iterator() {
+    public Iterator<DataType> iterator()
+    {
         return new KeyTreeIterator<DataType>(this.root);
     }
 
     public Node<DataType> getNodeWithKey(String key) throws Exception
     {
+        if(this.root.getKey().equals(key)) return root;
         Node<DataType> result = searchForKeyRecursive(this.root.getChildren(), key);
         if(result == null) throw new Exception("node with this key don't exist");
         return  result;
@@ -29,13 +31,24 @@ public class KeyTree<DataType> implements Iterable<DataType>
         for(Node<DataType> node: nodes)
         {
             if(node.getKey().equals(key)) return node;
-            if(!node.isLeaf()) return searchForKeyRecursive(node.getChildren(), key);
+            if(!node.isLeaf())
+            {
+                Node<DataType> result = searchForKeyRecursive(node.getChildren(), key);
+                if(result != null) return result;
+            }
         }
         return null;
     }
 
-    public void addChildToKeyNode(Node<DataType> child, String key) throws Exception
+    public void add(DataType data, String childKey, String parentKey) throws Exception
     {
-        getNodeWithKey(key).addChild(child);
+        getNodeWithKey(parentKey).addChild(new Node<>(data, childKey));
+    }
+
+    public DataType getLastData()
+    {
+        DataType result = this.root.getData();
+        for(DataType item: this) { result = item; }
+        return result;
     }
 }

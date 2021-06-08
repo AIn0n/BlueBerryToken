@@ -1,21 +1,25 @@
 package BlockChain;
 
 import BlockChain.Blocks.*;
-import java.util.ArrayList;
+import KeyTree.KeyTree;
 import java.util.Iterator;
 
 public class BlockChain implements Iterable<Block>
 {
-    ArrayList<Block> blocks;
+    KeyTree<Block> blocks;
 
     public BlockChain(Datable initData)
     {
-        this.blocks = new ArrayList<>();
-        this.blocks.add(new GenesisBlock(initData));
+        GenesisBlock genesis = new GenesisBlock(initData);
+        this.blocks = new KeyTree<Block>(genesis, genesis.getHashAsString());
     }
 
     @Override
     public Iterator<Block> iterator() { return blocks.iterator(); }
-    public void add(StdBlock block) { blocks.add(block); }
-    public Block last() { return this.blocks.get(this.blocks.size() - 1); }
+    public void add(StdBlock block)
+    {
+        try { blocks.add(block, block.getHashAsString(), block.getPrevHashAsString()); }
+        catch(Exception e) { e.printStackTrace(); }
+    }
+    public Block last() { return this.blocks.getLastData(); }
 }

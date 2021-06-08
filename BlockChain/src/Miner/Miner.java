@@ -33,7 +33,6 @@ public class Miner {
     {
         StrData initData = new StrData("foo");
         BlockChain bc = new BlockChain(initData);
-
         try //key generation
         {
             KeyPairGenerator KeyGen = KeyPairGenerator.getInstance("DSA", "SUN");

@@ -51,4 +51,6 @@ public class StdBlock extends Block
     }
 
     public void setNonce(long nonce) {this.nonce = nonce;}
+
+    public String getPrevHashAsString() { return HashingUtility.byteListToString(this.prevHash);}
 }

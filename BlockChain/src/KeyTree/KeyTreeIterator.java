@@ -1,27 +1,22 @@
 package KeyTree;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class KeyTreeIterator<DataType> implements Iterator<DataType>
 {
-    private final Node<DataType> cursor;
+    private Node<DataType> cursor;
 
     @Override
-    public boolean hasNext()
-    {
-        return this.cursor.isLeaf();
-    }
+    public boolean hasNext() { return this.cursor!=null; }
 
-    public KeyTreeIterator(Node<DataType> root)
-    {
-        this.cursor = root;
-    }
+    public KeyTreeIterator(Node<DataType> root) { this.cursor = root; }
 
     @Override
     public DataType next()
     {
-        try { return cursor.childWithHighestMaxLength().getData(); }
-        catch (Exception e) { e.printStackTrace(); }
-        return null;
+        DataType result = this.cursor.getData();
+        this.cursor = cursor.childWithHighestMaxLength();
+        return result;
     }
 }
