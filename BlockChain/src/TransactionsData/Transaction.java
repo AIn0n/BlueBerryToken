@@ -65,8 +65,6 @@ public class Transaction implements Datable
             HashUtil.longToByteList(this.index));
     }
 
-    public byte[] getSignature() { return signature; }
-
     public static void main(String[] args)
     {
         try

@@ -12,8 +12,11 @@ public class HashUtil {
         return sb.toString();
     }
 
-    public static byte[] hash(byte[] a) throws NoSuchAlgorithmException {
-        return MessageDigest.getInstance("SHA-256").digest(a);
+    public static byte[] hash(byte[] a)
+    {
+        try { return MessageDigest.getInstance("SHA-256").digest(a); }
+        catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
+        return new byte[0];
     }
 
     public static long byteListToLong(byte[] bytes) {

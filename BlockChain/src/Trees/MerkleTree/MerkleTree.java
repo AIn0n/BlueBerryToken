@@ -11,19 +11,12 @@ public class MerkleTree
 {
     private static byte[] getHash(ArrayList<byte[]> in)
     {
-        try
-        {
-            if (in.size() >= 2)
-            {
-                return HashUtil.hash(
-                        HashUtil.concatTwoByteLists(
-                                in.remove(0),
-                                in.remove(0)));
-            }
-            else if (in.size() == 1) { return HashUtil.hash(in.remove(0)); }
-        }
-        catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
-        return null;
+        return (in.size() >= 2) ?
+            HashUtil.hash(
+            HashUtil.concatTwoByteLists(
+                in.remove(0),
+                in.remove(0))) :
+            HashUtil.hash(in.remove(0));
     }
 
     private static byte[] recursiveHashing(ArrayList<byte[]> in)

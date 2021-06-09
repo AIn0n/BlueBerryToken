@@ -28,12 +28,7 @@ public class StdBlock extends Block
         );
     }
 
-    public byte[] calculateHash()
-    {
-        try { return HashUtil.hash(this.convertToBytes()); }
-        catch (java.security.NoSuchAlgorithmException e) { e.printStackTrace(); }
-        return null;
-    }
+    public byte[] calculateHash() { return HashUtil.hash(this.convertToBytes()); }
 
     @Override
     public boolean verify() { return data.verify() && Arrays.equals(calculateHash(), this.hash); }
