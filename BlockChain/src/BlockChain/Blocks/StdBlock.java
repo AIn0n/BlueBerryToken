@@ -1,6 +1,7 @@
 package BlockChain.Blocks;
 
 import java.security.PublicKey;
+import java.util.Arrays;
 
 import HashingUtility.HashUtil;
 
@@ -27,11 +28,15 @@ public class StdBlock extends Block
         );
     }
 
-    public void calculateHash()
+    public byte[] calculateHash()
     {
-        try { this.hash = HashUtil.hash(this.convertToBytes()); }
+        try { return HashUtil.hash(this.convertToBytes()); }
         catch (java.security.NoSuchAlgorithmException e) { e.printStackTrace(); }
+        return null;
     }
+
+    @Override
+    public boolean verify() { return data.verify() && Arrays.equals(calculateHash(), this.hash); }
 
     public String toString()
     {

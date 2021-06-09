@@ -7,7 +7,9 @@ import java.io.Serializable;
 abstract public class Block implements Serializable {
     protected byte[] hash;
     protected Datable data;
-    public abstract void calculateHash();
+    public abstract byte[] calculateHash();
     public byte[] getHash() { return this.hash; }
+    public void setHash(byte[] hash) { this.hash = hash; }
     public String getHashAsString() { return HashUtil.byteListToString(this.hash); }
+    public abstract boolean verify();
 }

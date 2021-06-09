@@ -17,15 +17,15 @@ public class Miner {
     public StdBlock mine(Datable data, byte[] prevHash)
     {
         StdBlock result = new StdBlock(data, prevHash, this.miner);
-        int i = 0;
-        do
+        byte[] hash = result.calculateHash();
+        for(long i = 0; hash[0] != 0x77; ++i)
         {
-            result.setNonce(i++);
-            result.calculateHash();
-            System.out.println("hash: " + HashUtil.byteListToString(result.getHash()));   //debug
+            result.setNonce(i);
+            hash = result.calculateHash();
+            System.out.println("hash: " + HashUtil.byteListToString(hash));   //debug
         }
-        while(result.getHash()[0] != 0x77);
 
+        result.setHash(hash);
         return result;
     }
 

@@ -7,19 +7,15 @@ public class GenesisBlock extends Block
     public GenesisBlock(Datable data)
     {
         this.data = data;
-        calculateHash();
-    }
-
-    private byte[] convertToBytes()
-    {
-        return this.data.getBytes();
+        this.hash = calculateHash();
     }
 
     @Override
-    public void calculateHash()
+    public byte[] calculateHash()
     {
-        try { this.hash = HashUtil.hash(this.convertToBytes()); }
+        try { return HashUtil.hash(this.data.getBytes()); }
         catch (java.security.NoSuchAlgorithmException e) { e.printStackTrace(); }
+        return null;
     }
 
     public String toString()
@@ -28,4 +24,7 @@ public class GenesisBlock extends Block
             "message: "     + this.data +
             "\nhash: "      + HashUtil.byteListToString(this.hash) + '\n');
     }
+
+    @Override
+    public boolean verify() { return true; }
 }
