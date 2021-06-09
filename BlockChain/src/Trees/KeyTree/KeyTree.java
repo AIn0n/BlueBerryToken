@@ -1,4 +1,4 @@
-package KeyTree;
+package Trees.KeyTree;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +15,7 @@ public class KeyTree<DataType> implements Iterable<DataType>
     @Override
     public Iterator<DataType> iterator()
     {
-        return new KeyTreeIterator<DataType>(this.root);
+        return new KeyTreeIterator<>(this.root);
     }
 
     public Node<DataType> getNodeWithKey(String key) throws Exception

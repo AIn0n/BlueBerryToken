@@ -1,7 +1,6 @@
-package KeyTree;
+package Trees.KeyTree;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 public class KeyTreeIterator<DataType> implements Iterator<DataType>
 {

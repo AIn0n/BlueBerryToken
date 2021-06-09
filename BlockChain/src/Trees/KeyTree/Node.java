@@ -1,4 +1,4 @@
-package KeyTree;
+package Trees.KeyTree;
 
 import java.util.ArrayList;
 

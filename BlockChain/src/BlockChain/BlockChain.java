@@ -1,7 +1,7 @@
 package BlockChain;
 
 import BlockChain.Blocks.*;
-import KeyTree.KeyTree;
+import Trees.KeyTree.KeyTree;
 import java.util.Iterator;
 
 public class BlockChain implements Iterable<Block>
@@ -11,7 +11,7 @@ public class BlockChain implements Iterable<Block>
     public BlockChain(Datable initData)
     {
         GenesisBlock genesis = new GenesisBlock(initData);
-        this.blocks = new KeyTree<Block>(genesis, genesis.getHashAsString());
+        this.blocks = new KeyTree<>(genesis, genesis.getHashAsString());
     }
 
     @Override

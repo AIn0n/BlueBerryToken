@@ -1,9 +1,8 @@
-package MerkleTree;
+package Trees.MerkleTree;
 
 import BlockChain.Blocks.Datable;
-import BlockChain.StrData;
+import BlockChain.StrData;//added only for debug purposes, remove with main
 import HashingUtility.HashUtil;
-
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ public class MerkleTree
 
     public static void main(String[] args)
     {
-        List<Datable> data = new ArrayList<>();
+        ArrayList<Datable> data = new ArrayList<>();
         data.add(new StrData("foo"));
         data.add(new StrData("bar"));
         data.add(new StrData("NICE"));
