@@ -1,9 +1,8 @@
 package BlockChain.Blocks;
 
-import java.security.MessageDigest;
 import java.security.PublicKey;
 
-import HashingUtility.HashingUtility;
+import HashingUtility.HashUtil;
 
 public class StdBlock extends Block
 {
@@ -21,9 +20,9 @@ public class StdBlock extends Block
 
     private byte[] convertToBytes()
     {
-        return HashingUtility.concatByteLists(
-            HashingUtility.longToByteList(this.index),
-            HashingUtility.longToByteList(this.nonce),
+        return HashUtil.concatByteLists(
+            HashUtil.longToByteList(this.index),
+            HashUtil.longToByteList(this.nonce),
             this.data.getBytes(),
             this.miner.getEncoded(),
             this.prevHash
@@ -32,12 +31,7 @@ public class StdBlock extends Block
 
     public void calculateHash()
     {
-        try
-        {
-            this.hash = MessageDigest
-                    .getInstance("SHA-256")
-                    .digest(this.convertToBytes());
-        }
+        try { this.hash = HashUtil.hash(this.convertToBytes()); }
         catch (java.security.NoSuchAlgorithmException e) { e.printStackTrace(); }
     }
 
@@ -46,11 +40,11 @@ public class StdBlock extends Block
         return (
             "message: "     + this.data +
             "\nindex: "     + this.index +
-            "\nhash: "      + HashingUtility.byteListToString(this.hash) +
-            "\nprev hash: " + HashingUtility.byteListToString(this.prevHash) + '\n');
+            "\nhash: "      + HashUtil.byteListToString(this.hash) +
+            "\nprev hash: " + HashUtil.byteListToString(this.prevHash) + '\n');
     }
 
     public void setNonce(long nonce) {this.nonce = nonce;}
 
-    public String getPrevHashAsString() { return HashingUtility.byteListToString(this.prevHash);}
+    public String getPrevHashAsString() { return HashUtil.byteListToString(this.prevHash);}
 }

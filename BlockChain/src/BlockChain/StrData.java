@@ -18,4 +18,7 @@ public class StrData implements Datable {
     public String toString() {
         return this.string;
     }
+
+    @Override
+    public boolean verify() { return true; }
 }

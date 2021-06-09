@@ -1,7 +1,7 @@
 package TransactionsData;
 
 import BlockChain.Blocks.Datable;
-import HashingUtility.HashingUtility;
+import HashingUtility.HashUtil;
 
 import java.security.*;
 
@@ -57,12 +57,12 @@ public class Transaction implements Datable
     @Override
     public byte[] getBytes()
     {
-        return HashingUtility.concatByteLists(
+        return HashUtil.concatByteLists(
             this.from.getEncoded(),
             this.to.getEncoded(),
-            HashingUtility.longToByteList(this.amount),
-            HashingUtility.longToByteList(this.tip),
-            HashingUtility.longToByteList(this.index));
+            HashUtil.longToByteList(this.amount),
+            HashUtil.longToByteList(this.tip),
+            HashUtil.longToByteList(this.index));
     }
 
     public byte[] getSignature() { return signature; }

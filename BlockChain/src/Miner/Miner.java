@@ -4,7 +4,7 @@ import BlockChain.*;
 import BlockChain.Blocks.Block;
 import BlockChain.Blocks.StdBlock;
 import BlockChain.Blocks.Datable;
-import HashingUtility.HashingUtility;
+import HashingUtility.HashUtil;
 
 import java.security.*;
 
@@ -22,7 +22,7 @@ public class Miner {
         {
             result.setNonce(i++);
             result.calculateHash();
-            System.out.println("hash: " + HashingUtility.byteListToString(result.getHash()));   //debug
+            System.out.println("hash: " + HashUtil.byteListToString(result.getHash()));   //debug
         }
         while(result.getHash()[0] != 0x77);
 

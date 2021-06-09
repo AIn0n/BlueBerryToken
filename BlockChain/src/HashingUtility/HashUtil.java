@@ -1,14 +1,19 @@
 package HashingUtility;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 //not sure for how long this class will be useful, if I will use it more than for debugging
 //i create new file for it
-public class HashingUtility {
+public class HashUtil {
     public static String byteListToString(byte[] bytes) {
         StringBuilder sb = new StringBuilder();
-        for (byte b : bytes) {
-            sb.append(String.format("%02x", b));
-        }
+        for (byte b : bytes) { sb.append(String.format("%02x", b)); }
         return sb.toString();
+    }
+
+    public static byte[] hash(byte[] a) throws NoSuchAlgorithmException {
+        return MessageDigest.getInstance("SHA-256").digest(a);
     }
 
     public static long byteListToLong(byte[] bytes) {
@@ -29,7 +34,7 @@ public class HashingUtility {
         return result;
     }
 
-    private static byte[] concatTwoByteLists(byte[] first, byte[] second) {
+    public static byte[] concatTwoByteLists(byte[] first, byte[] second) {
         byte[] result = new byte[first.length + second.length];
         System.arraycopy(first, 0, result, 0, first.length);
         System.arraycopy(second, 0, result, first.length, second.length);

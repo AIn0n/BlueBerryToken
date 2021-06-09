@@ -1,8 +1,6 @@
 package BlockChain.Blocks;
 
-import HashingUtility.HashingUtility;
-
-import java.security.MessageDigest;
+import HashingUtility.HashUtil;
 
 public class GenesisBlock extends Block
 {
@@ -15,20 +13,15 @@ public class GenesisBlock extends Block
 
     private byte[] convertToBytes()
     {
-        return HashingUtility.concatByteLists(
-            HashingUtility.longToByteList(this.index),
+        return HashUtil.concatTwoByteLists(
+            HashUtil.longToByteList(this.index),
             this.data.getBytes());
     }
 
     @Override
     public void calculateHash()
     {
-        try
-        {
-            this.hash = MessageDigest
-                .getInstance("SHA-256")
-                .digest(this.convertToBytes());
-        }
+        try { this.hash = HashUtil.hash(this.convertToBytes()); }
         catch (java.security.NoSuchAlgorithmException e) { e.printStackTrace(); }
     }
 
@@ -37,6 +30,6 @@ public class GenesisBlock extends Block
         return (
             "message: "     + this.data +
             "\nindex: "     + this.index +
-            "\nhash: "      + HashingUtility.byteListToString(this.hash) + '\n');
+            "\nhash: "      + HashUtil.byteListToString(this.hash) + '\n');
     }
 }
