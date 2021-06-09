@@ -9,43 +9,41 @@ import java.util.List;
 
 public class MerkleTree
 {
-    private ArrayList<byte[]> list = new ArrayList<>();
-
-    public MerkleTree(List<Datable> inList)
-    {
-        for(Datable n: inList) { list.add(n.getBytes()); }
-    }
-
-    private byte[] getHash()
+    private static byte[] getHash(ArrayList<byte[]> in)
     {
         try
         {
-            if (this.list.size() >= 2)
+            if (in.size() >= 2)
             {
                 return HashUtil.hash(
                         HashUtil.concatTwoByteLists(
-                                this.list.remove(0),
-                                this.list.remove(0)));
+                                in.remove(0),
+                                in.remove(0)));
             }
-            else if (this.list.size() == 1) { return HashUtil.hash(this.list.remove(0)); }
+            else if (in.size() == 1) { return HashUtil.hash(in.remove(0)); }
         }
         catch (NoSuchAlgorithmException e) { e.printStackTrace(); }
         return null;
     }
 
-    private void recursiveHashing()
+    private static byte[] recursiveHashing(ArrayList<byte[]> in)
     {
         ArrayList<byte[]> out = new ArrayList<>();
-        while(list.size() > 0) { out.add(getHash()); }
-        this.list = out;
-        if(list.size() == 1) return;
-        recursiveHashing();
+        while(in.size() > 0) { out.add(getHash(in)); }
+        if(out.size() == 1) return out.get(0);
+        return recursiveHashing(out);
     }
 
-    public byte[] getMerkleRoot()
+    private static ArrayList<byte[]> getHashesArrayList(List<Datable> in)
     {
-        recursiveHashing();
-        return list.get(0);
+        ArrayList<byte[]> out = new ArrayList<>();
+        for(Datable n: in) { out.add(n.getBytes()); }
+        return out;
+    }
+
+    public static byte[] getMerkleRoot(List<Datable> in)
+    {
+        return recursiveHashing(getHashesArrayList(in));
     }
 
     public static void main(String[] args)
@@ -56,7 +54,7 @@ public class MerkleTree
         data.add(new StrData("NICE"));
         data.add(new StrData("hello"));
         data.add(new StrData("world"));
-        MerkleTree merkleTree = new MerkleTree(data);
-        System.out.println(HashUtil.byteListToString(merkleTree.getMerkleRoot()));
+        byte[] hash = MerkleTree.getMerkleRoot(data);
+        System.out.println(HashUtil.byteListToString(hash));
     }
 }
