@@ -10,18 +10,16 @@ public class StdBlock extends Block
     private final PublicKey miner;
     private long nonce = 0;
 
-    public StdBlock(Datable data, Block prevBlock, PublicKey miner)
+    public StdBlock(Datable data, byte[] prevHash, PublicKey miner)
     {
         this.data = data;
-        this.prevHash = prevBlock.getHash();
-        this.index = prevBlock.getIndex() + 1;
+        this.prevHash = prevHash;
         this.miner = miner;
     }
 
     private byte[] convertToBytes()
     {
         return HashUtil.concatByteLists(
-            HashUtil.longToByteList(this.index),
             HashUtil.longToByteList(this.nonce),
             this.data.getBytes(),
             this.miner.getEncoded(),
@@ -39,7 +37,6 @@ public class StdBlock extends Block
     {
         return (
             "message: "     + this.data +
-            "\nindex: "     + this.index +
             "\nhash: "      + HashUtil.byteListToString(this.hash) +
             "\nprev hash: " + HashUtil.byteListToString(this.prevHash) + '\n');
     }

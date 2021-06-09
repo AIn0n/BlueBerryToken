@@ -7,15 +7,12 @@ public class GenesisBlock extends Block
     public GenesisBlock(Datable data)
     {
         this.data = data;
-        this.index = 0;
         calculateHash();
     }
 
     private byte[] convertToBytes()
     {
-        return HashUtil.concatTwoByteLists(
-            HashUtil.longToByteList(this.index),
-            this.data.getBytes());
+        return this.data.getBytes();
     }
 
     @Override
@@ -29,7 +26,6 @@ public class GenesisBlock extends Block
     {
         return (
             "message: "     + this.data +
-            "\nindex: "     + this.index +
             "\nhash: "      + HashUtil.byteListToString(this.hash) + '\n');
     }
 }

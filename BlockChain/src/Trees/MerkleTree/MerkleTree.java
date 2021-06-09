@@ -34,21 +34,21 @@ public class MerkleTree
         return recursiveHashing(out);
     }
 
-    private static ArrayList<byte[]> getHashesArrayList(List<Datable> in)
+    private static ArrayList<byte[]> getHashesArrayList(List<? extends Datable> in)
     {
         ArrayList<byte[]> out = new ArrayList<>();
         for(Datable n: in) { out.add(n.getBytes()); }
         return out;
     }
 
-    public static byte[] getMerkleRoot(List<Datable> in)
+    public static byte[] getMerkleRoot(List<? extends Datable> in)
     {
         return recursiveHashing(getHashesArrayList(in));
     }
 
     public static void main(String[] args)
     {
-        ArrayList<Datable> data = new ArrayList<>();
+        ArrayList<StrData> data = new ArrayList<>();
         data.add(new StrData("foo"));
         data.add(new StrData("bar"));
         data.add(new StrData("NICE"));

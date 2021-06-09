@@ -14,9 +14,9 @@ public class Miner {
 
     public Miner(PublicKey pk) { this.miner = pk; }
 
-    public StdBlock mine(Datable data, Block prevBlock)
+    public StdBlock mine(Datable data, byte[] prevHash)
     {
-        StdBlock result = new StdBlock(data, prevBlock, this.miner);
+        StdBlock result = new StdBlock(data, prevHash, this.miner);
         int i = 0;
         do
         {
@@ -39,7 +39,7 @@ public class Miner {
             KeyGen.initialize(1024);
             KeyPair pair = KeyGen.genKeyPair();
             Miner miner = new Miner(pair.getPublic());
-            StdBlock blockToDig = miner.mine(new StrData("bar"), bc.last());
+            StdBlock blockToDig = miner.mine(new StrData("bar"), bc.last().getHash());
             bc.add(blockToDig);
         }
         catch (NoSuchAlgorithmException | NoSuchProviderException e) {e.printStackTrace();}
