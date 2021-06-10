@@ -2,19 +2,19 @@ package Trees.KeyTree;
 
 import java.util.Iterator;
 
-public class KeyTreeIterator<DataType> implements Iterator<DataType>
+public class KeyTreeIterator<G, T extends Comparable<T>> implements Iterator<G>
 {
-    private Node<DataType> cursor;
+    private Node<G, T> cursor;
 
     @Override
     public boolean hasNext() { return this.cursor!=null; }
 
-    public KeyTreeIterator(Node<DataType> root) { this.cursor = root; }
+    public KeyTreeIterator(Node<G, T> root) { this.cursor = root; }
 
     @Override
-    public DataType next()
+    public G next()
     {
-        DataType result = this.cursor.getData();
+        G result = this.cursor.getData();
         this.cursor = cursor.childWithHighestMaxLength();
         return result;
     }

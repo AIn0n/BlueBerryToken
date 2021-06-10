@@ -3,52 +3,52 @@ package Trees.KeyTree;
 import java.util.Iterator;
 import java.util.List;
 
-public class KeyTree<DataType> implements Iterable<DataType>
+public class KeyTree<G, T extends Comparable<T>> implements Iterable<G>
 {
-    Node<DataType> root;
+    private final Node<G, T> root;
 
-    public KeyTree(DataType data, String key)
+    public KeyTree(G data, T key)
     {
         this.root = new Node<>(data, key);
     }
 
     @Override
-    public Iterator<DataType> iterator()
+    public Iterator<G> iterator()
     {
         return new KeyTreeIterator<>(this.root);
     }
 
-    public Node<DataType> getNodeWithKey(String key) throws Exception
+    public Node<G, T> getNodeWithKey(T key) throws Exception
     {
         if(this.root.getKey().equals(key)) return root;
-        Node<DataType> result = searchForKeyRecursive(this.root.getChildren(), key);
+        Node<G, T> result = searchForKeyRecursive(this.root.getChildren(), key);
         if(result == null) throw new Exception("node with this key don't exist");
         return  result;
     }
 
-    private Node<DataType> searchForKeyRecursive(List<Node<DataType>> nodes, String key)
+    private Node<G, T> searchForKeyRecursive(List<Node<G, T>> nodes, T key)
     {
-        for(Node<DataType> node: nodes)
+        for(Node<G, T> node: nodes)
         {
             if(node.getKey().equals(key)) return node;
             if(!node.isLeaf())
             {
-                Node<DataType> result = searchForKeyRecursive(node.getChildren(), key);
+                Node<G, T> result = searchForKeyRecursive(node.getChildren(), key);
                 if(result != null) return result;
             }
         }
         return null;
     }
 
-    public void add(DataType data, String childKey, String parentKey) throws Exception
+    public void add(G data, T childKey, T parentKey) throws Exception
     {
         getNodeWithKey(parentKey).addChild(new Node<>(data, childKey));
     }
 
-    public DataType getLastData()
+    public G getLastData()
     {
-        DataType result = this.root.getData();
-        for(DataType item: this) { result = item; }
+        G result = this.root.getData();
+        for(G item: this) { result = item; }
         return result;
     }
 }

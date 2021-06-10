@@ -6,7 +6,7 @@ import java.util.Iterator;
 
 public class BlockChain implements Iterable<Block>
 {
-    KeyTree<Block> blocks;
+    KeyTree<Block, String> blocks;
 
     public BlockChain(Datable initData)
     {

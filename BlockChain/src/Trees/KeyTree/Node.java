@@ -2,28 +2,28 @@ package Trees.KeyTree;
 
 import java.util.ArrayList;
 
-public class Node<DataType> {
-    private final DataType data;
-    private final String key;
-    private final ArrayList<Node<DataType>> children = new ArrayList<>();
+public class Node<G, T extends Comparable<T>> {
+    private final G data;
+    private final T key;
+    private final ArrayList<Node<G, T>> children = new ArrayList<>();
     private int maxLength = 0;
 
 
-    Node(DataType data, String key) {
+    Node(G data, T key) {
         this.data = data;
         this.key = key;
     }
 
-    public void addChild(Node<DataType> child) {
+    public void addChild(Node<G, T> child) {
         child.setMaxLength(this.maxLength + 1);
         this.children.add(child);
     }
 
-    public Node<DataType> childWithHighestMaxLength()
+    public Node<G, T> childWithHighestMaxLength()
     {
         int max =0;
-        Node<DataType> result = null;
-        for(Node<DataType> child: this.children)
+        Node<G, T> result = null;
+        for(Node<G, T> child: this.children)
         {
             if(child.maxLength > max)
             {
@@ -37,11 +37,11 @@ public class Node<DataType> {
     public boolean isLeaf() { return (this.children.size() == 0); }
 
 //getters and setters
-    public DataType getData() { return data; }
+    public G getData() { return data; }
 
-    public String getKey() { return key; }
+    public T getKey() { return key; }
 
-    public ArrayList<Node<DataType>> getChildren() { return children; }
+    public ArrayList<Node<G, T>> getChildren() { return children; }
 
     public void setMaxLength(int maxLength) {
         this.maxLength = maxLength;
