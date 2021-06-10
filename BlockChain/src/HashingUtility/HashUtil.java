@@ -28,6 +28,15 @@ public class HashUtil {
         return result;
     }
 
+    public static int byteListToInt(byte[] bytes) {
+        int result = 0;
+        for (int i = 0; i < Integer.BYTES; ++i) {
+            result <<= Byte.SIZE;
+            result |= (bytes[i] & 0xFF);
+        }
+        return result;
+    }
+
     public static byte[] longToByteList(long value) {
         byte[] result = new byte[Long.BYTES];
         for (int i = Long.BYTES - 1; i > -1; --i) {

@@ -3,9 +3,7 @@ package Trees.MerkleTree;
 import BlockChain.Blocks.Datable;
 import BlockChain.StrData;//added only for debug purposes, remove with main
 import HashingUtility.HashUtil;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MerkleTree
 {
@@ -27,14 +25,14 @@ public class MerkleTree
         return recursiveHashing(out);
     }
 
-    private static ArrayList<byte[]> getHashesArrayList(List<? extends Datable> in)
+    private static ArrayList<byte[]> getHashesArrayList(Iterable<? extends Datable> in)
     {
         ArrayList<byte[]> out = new ArrayList<>();
         for(Datable n: in) { out.add(n.getBytes()); }
         return out;
     }
 
-    public static byte[] getMerkleRoot(List<? extends Datable> in)
+    public static byte[] getMerkleRoot(Iterable<? extends Datable> in)
     {
         return recursiveHashing(getHashesArrayList(in));
     }

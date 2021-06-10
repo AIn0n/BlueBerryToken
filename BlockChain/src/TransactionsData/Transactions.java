@@ -2,25 +2,21 @@ package TransactionsData;
 
 import BlockChain.Blocks.Datable;
 import Trees.MerkleTree.MerkleTree;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Transactions implements Datable {
-
-    ArrayList<Transaction> transactions;
-    byte[] hash;
+public class Transactions implements Datable, Iterable<Transaction>
+{
+    //Linked list to make impossible entering two same transactions
+    private LinkedHashSet<Transaction> transactions = new LinkedHashSet<>();
+    private byte[] hash;
 
     @Override
-    public byte[] getBytes() {
-        return new byte[0];
-    }
+    public byte[] getBytes() { return this.hash; }
 
-    public Transactions(ArrayList<Transaction> in)
-    {
-        this.transactions = in;
-        this.hash = MerkleTree.getMerkleRoot(in);
-    }
+    @Override
+    public Iterator<Transaction> iterator() { return transactions.iterator(); }
+
     public void add(Transaction transaction)
     {
         transactions.add(transaction);

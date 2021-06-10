@@ -2,27 +2,36 @@ package TransactionsData;
 
 import BlockChain.Blocks.Datable;
 import HashingUtility.HashUtil;
-
 import java.security.*;
+import java.util.Arrays;
 
 public class Transaction implements Datable
 {
-    private final PublicKey from;
-    private final PublicKey to;
+    private final PublicKey sender;
+    private final PublicKey recipient;
     private byte[] signature;
     private final long amount;
     private final long tip;
     private final long index;
 
-    Transaction(KeyPair senderKeys, PublicKey to, long amount, long idx, long tip)
+    Transaction(KeyPair senderKeys, PublicKey recipient, long amount, long idx, long tip)
     {
-        this.from = senderKeys.getPublic();
-        this.to = to;
+        this.sender = senderKeys.getPublic();
+        this.recipient = recipient;
         this.amount = amount;
         this.tip = tip;
         this.index = idx;
         sign(senderKeys.getPrivate());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Transaction that = (Transaction) o;
+        return Arrays.equals(this.getBytes(), that.getBytes());
+    }
+    @Override
+    public int hashCode() { return HashUtil.byteListToInt(HashUtil.hash(this.getBytes())); }
 
     private void sign(PrivateKey sk)
     {
@@ -41,9 +50,9 @@ public class Transaction implements Datable
         try
         {
             Signature dsa = Signature.getInstance("SHA1withDSA", "SUN");
-            dsa.initVerify(this.from);
+            dsa.initVerify(this.sender);
             dsa.update(getBytes());
-            return dsa.verify(this.signature);
+            return dsa.verify(this.signature) && !(this.sender.equals(this.recipient));
         }
         catch (Exception e) { e.printStackTrace(); }
         return false;
@@ -51,30 +60,21 @@ public class Transaction implements Datable
 
     public String toString()
     {
-        return "from: " + this.from + " to: " + this.to + " amount: " + this.amount + " tip: " + this.tip;
+        return "from: " + this.sender.hashCode() + " to: " + this.recipient.hashCode() + " amount: " + this.amount + " tip: " + this.tip;
     }
 
     @Override
     public byte[] getBytes()
     {
         return HashUtil.concatByteLists(
-            this.from.getEncoded(),
-            this.to.getEncoded(),
+            this.sender.getEncoded(),
+            this.recipient.getEncoded(),
             HashUtil.longToByteList(this.amount),
             HashUtil.longToByteList(this.tip),
             HashUtil.longToByteList(this.index));
     }
 
-    public static void main(String[] args)
-    {
-        try
-        {
-            KeyPairGenerator KeyGen = KeyPairGenerator.getInstance("DSA", "SUN");
-            KeyGen.initialize(1024);
-            KeyPair pair = KeyGen.genKeyPair();
-            Transaction transaction = new Transaction(pair, pair.getPublic(), 1000, 1, 2);
-            System.out.println("verification > " + transaction.verify());
-        }
-        catch (NoSuchAlgorithmException | NoSuchProviderException e) { e.printStackTrace(); }
-    }
+    public PublicKey getSender() { return this.sender; }
+    public PublicKey getRecipient() { return this.recipient; }
+    public long getAmount() { return this.amount; }
 }
