@@ -1,12 +1,15 @@
 package TransactionsData;
 
+import BlockChain.BlockChain;
+import BlockChain.Blocks.Block;
+
 import java.security.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TokenCounter
 {
-    private static void addTransactionsToWallets(HashMap<PublicKey, Long> wallets, Transaction transaction)
+    public static void addTransactionsToWallets(HashMap<PublicKey, Long> wallets, Transaction transaction)
     {
         long amount = transaction.getAmount();
         wallets.compute(transaction.getSender(),
@@ -22,13 +25,38 @@ public class TokenCounter
         return wallets;
     }
 
-    public static long count(PublicKey pk, Transactions transactions)
+    public static HashMap<PublicKey, Long> countAll(BlockChain bc)
+    {
+        HashMap<PublicKey, Long> wallets = new HashMap<>();
+        for(Block x: bc)
+        {
+            Transactions transactions = (Transactions) x.getData();
+            for(Transaction y: transactions)
+            {
+                addTransactionsToWallets(wallets, y);
+            }
+        }
+        return wallets;
+    }
+
+    public static long countForKeyFromTransactions(PublicKey pk, Transactions transactions)
     {
         long result = 0L;
         for(Transaction n: transactions)
         {
             if(n.getSender().equals(pk)) result -= n.getAmount();
             if(n.getRecipient().equals(pk)) result += n.getAmount();
+        }
+        return result;
+    }
+
+    public static long countForKey(PublicKey pk, BlockChain bc)
+    {
+        long result = 0L;
+        for(Block n: bc)
+        {
+            Transactions transactions = (Transactions) n.getData();
+            result += countForKeyFromTransactions(pk, transactions);
         }
         return result;
     }

@@ -8,7 +8,7 @@ import java.util.LinkedHashSet;
 public class Transactions implements Datable, Iterable<Transaction>
 {
     //Linked list to make impossible entering two same transactions
-    private LinkedHashSet<Transaction> transactions = new LinkedHashSet<>();
+    private final LinkedHashSet<Transaction> transactions = new LinkedHashSet<>();
     private byte[] hash;
 
     @Override

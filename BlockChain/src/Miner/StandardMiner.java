@@ -8,11 +8,11 @@ import HashingUtility.HashUtil;
 
 import java.security.*;
 
-public class Miner {
+public class StandardMiner {
 
     private final PublicKey miner;
 
-    public Miner(PublicKey pk) { this.miner = pk; }
+    public StandardMiner(PublicKey pk) { this.miner = pk; }
 
     public StdBlock mine(Datable data, byte[] prevHash)
     {
@@ -38,7 +38,7 @@ public class Miner {
             KeyPairGenerator KeyGen = KeyPairGenerator.getInstance("DSA", "SUN");
             KeyGen.initialize(1024);
             KeyPair pair = KeyGen.genKeyPair();
-            Miner miner = new Miner(pair.getPublic());
+            StandardMiner miner = new StandardMiner(pair.getPublic());
             StdBlock blockToDig = miner.mine(new StrData("bar"), bc.last().getHash());
             bc.add(blockToDig);
         }
