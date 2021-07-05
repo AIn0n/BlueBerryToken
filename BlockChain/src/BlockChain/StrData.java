@@ -1,6 +1,7 @@
 package BlockChain;
 
 import BlockChain.Blocks.Datable;
+import HashingUtility.HashUtil;
 
 //testing only class - not for production code
 public class StrData implements Datable {
@@ -9,16 +10,12 @@ public class StrData implements Datable {
     public StrData(String str) {
         this.string = str;
     }
-
-    @Override
-    public byte[] getBytes() {
-        return this.string.getBytes();
-    }
-
     public String toString() {
         return this.string;
     }
 
     @Override
-    public boolean verify() { return true; }
+    public byte[] getHash() {
+        return HashUtil.hash(this.string.getBytes());
+    }
 }

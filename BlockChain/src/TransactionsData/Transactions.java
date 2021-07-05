@@ -12,7 +12,7 @@ public class Transactions implements Datable, Iterable<Transaction>
     private byte[] hash;
 
     @Override
-    public byte[] getBytes() { return this.hash; }
+    public byte[] getHash() { return this.hash; }
 
     @Override
     public Iterator<Transaction> iterator() { return transactions.iterator(); }
@@ -21,12 +21,5 @@ public class Transactions implements Datable, Iterable<Transaction>
     {
         transactions.add(transaction);
         this.hash = MerkleTree.getMerkleRoot(this.transactions);
-    }
-
-    @Override
-    public boolean verify()
-    {
-        for (Transaction n : this.transactions) { if(!n.verify()) return false; }
-        return (this.hash == MerkleTree.getMerkleRoot(this.transactions));
     }
 }

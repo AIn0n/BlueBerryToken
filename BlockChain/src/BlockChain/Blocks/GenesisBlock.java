@@ -11,7 +11,7 @@ public class GenesisBlock extends Block
     }
 
     @Override
-    public byte[] calculateHash() { return HashUtil.hash(this.data.getBytes()); }
+    public byte[] calculateHash() { return HashUtil.hash(this.data.getHash()); }
 
     public String toString()
     {

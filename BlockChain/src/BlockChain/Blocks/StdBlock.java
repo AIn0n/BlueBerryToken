@@ -10,6 +10,7 @@ public class StdBlock extends Block
     private final byte[] prevHash;
     private final PublicKey miner;
     private long nonce = 0;
+    private final Datable data;
 
     public StdBlock(Datable data, byte[] prevHash, PublicKey miner)
     {
@@ -22,16 +23,19 @@ public class StdBlock extends Block
     {
         return HashUtil.concatByteLists(
             HashUtil.longToByteList(this.nonce),
-            this.data.getBytes(),
             this.miner.getEncoded(),
+            this.data.getHash(),
             this.prevHash
         );
     }
 
-    public byte[] calculateHash() { return HashUtil.hash(this.convertToBytes()); }
+    public byte[] calculateHash()
+    {
+        return HashUtil.hash(this.convertToBytes());
+    }
 
     @Override
-    public boolean verify() { return data.verify() && Arrays.equals(calculateHash(), this.hash); }
+    public boolean verify() { return Arrays.equals(calculateHash(), this.hash); }
 
     public String toString()
     {

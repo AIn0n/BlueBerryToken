@@ -4,6 +4,5 @@ import java.io.Serializable;
 
 public interface Datable extends Serializable
 {
-    byte[] getBytes();
-    boolean verify();
+    byte[] getHash();
 }

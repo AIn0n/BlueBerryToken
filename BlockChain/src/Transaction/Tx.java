@@ -1,11 +1,12 @@
 package Transaction;
 
+import BlockChain.Blocks.Datable;
 import HashingUtility.HashUtil;
 
-public class Tx
+public class Tx implements Datable
 {
-    private Iterable<TxIn> inputTx;
-    private Iterable<TxOut> outputTx;
+    private final Iterable<TxIn> inputTx;
+    private final Iterable<TxOut> outputTx;
 
     public Tx(Iterable<TxIn> in, Iterable<TxOut> out)
     {
@@ -40,6 +41,11 @@ public class Tx
     public boolean validate()
     {
         return (getInSum() == getOutSum());
+    }
+
+    @Override
+    public byte[] getHash() {
+        return new byte[0];
     }
 }
 

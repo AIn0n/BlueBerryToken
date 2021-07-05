@@ -28,7 +28,7 @@ public class MerkleTree
     private static ArrayList<byte[]> getHashesArrayList(Iterable<? extends Datable> in)
     {
         ArrayList<byte[]> out = new ArrayList<>();
-        for(Datable n: in) { out.add(n.getBytes()); }
+        for(Datable n: in) { out.add(n.getHash()); }
         return out;
     }
 
