@@ -1,9 +1,9 @@
 package Transaction;
 
-import BlockChain.Blocks.Datable;
+import BlockChain.Blocks.Hashable;
 import HashingUtility.HashUtil;
 
-public class Tx implements Datable
+public class Tx implements Hashable
 {
     private final Iterable<TxIn> inputTx;
     private final Iterable<TxOut> outputTx;

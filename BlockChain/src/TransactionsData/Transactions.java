@@ -1,11 +1,11 @@
 package TransactionsData;
 
-import BlockChain.Blocks.Datable;
+import BlockChain.Blocks.Hashable;
 import Trees.MerkleTree.MerkleTree;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
-public class Transactions implements Datable, Iterable<Transaction>
+public class Transactions implements Hashable, Iterable<Transaction>
 {
     //Linked list to make impossible entering two same transactions
     private final LinkedHashSet<Transaction> transactions = new LinkedHashSet<>();

@@ -10,9 +10,9 @@ public class StdBlock extends Block
     private final byte[] prevHash;
     private final PublicKey miner;
     private long nonce = 0;
-    private final Datable data;
+    private final Hashable data;
 
-    public StdBlock(Datable data, byte[] prevHash, PublicKey miner)
+    public StdBlock(Hashable data, byte[] prevHash, PublicKey miner)
     {
         this.data = data;
         this.prevHash = prevHash;

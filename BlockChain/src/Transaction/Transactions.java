@@ -1,11 +1,11 @@
 package Transaction;
 
-import BlockChain.Blocks.Datable;
+import BlockChain.Blocks.Hashable;
 import Trees.MerkleTree.MerkleTree;
 
 import java.util.HashSet;
 
-public class Transactions implements Datable
+public class Transactions implements Hashable
 {
     private HashSet<Tx> transactions;
 

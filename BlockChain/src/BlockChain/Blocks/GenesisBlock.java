@@ -4,7 +4,7 @@ import HashingUtility.HashUtil;
 
 public class GenesisBlock extends Block
 {
-    public GenesisBlock(Datable data)
+    public GenesisBlock(Hashable data)
     {
         this.data = data;
         this.hash = calculateHash();

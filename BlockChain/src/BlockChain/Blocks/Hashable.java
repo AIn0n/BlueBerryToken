@@ -2,7 +2,7 @@ package BlockChain.Blocks;
 
 import java.io.Serializable;
 
-public interface Datable extends Serializable
+public interface Hashable extends Serializable
 {
     byte[] getHash();
 }

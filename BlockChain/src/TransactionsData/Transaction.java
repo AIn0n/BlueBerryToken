@@ -1,11 +1,11 @@
 package TransactionsData;
 
-import BlockChain.Blocks.Datable;
+import BlockChain.Blocks.Hashable;
 import HashingUtility.HashUtil;
 import java.security.*;
 import java.util.Arrays;
 
-public class Transaction implements Datable
+public class Transaction implements Hashable
 {
     private final PublicKey sender;
     private final PublicKey recipient;
@@ -28,10 +28,10 @@ public class Transaction implements Datable
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return Arrays.equals(this.getBytes(), that.getBytes());
+        return Arrays.equals(this.getHash(), that.getHash());
     }
     @Override
-    public int hashCode() { return HashUtil.byteListToInt(HashUtil.hash(this.getBytes())); }
+    public int hashCode() { return HashUtil.byteListToInt(HashUtil.hash(this.getHash())); }
 
     private void sign(PrivateKey sk)
     {
@@ -39,7 +39,7 @@ public class Transaction implements Datable
         {
             Signature dsa = Signature.getInstance("SHA1withDSA", "SUN");
             dsa.initSign(sk);
-            dsa.update(getBytes());
+            dsa.update(getHash());
             this.signature = dsa.sign();
         }
         catch (Exception e) { e.printStackTrace(); }
@@ -51,7 +51,7 @@ public class Transaction implements Datable
         {
             Signature dsa = Signature.getInstance("SHA1withDSA", "SUN");
             dsa.initVerify(this.sender);
-            dsa.update(getBytes());
+            dsa.update(getHash());
             return dsa.verify(this.signature) && !(this.sender.equals(this.recipient));
         }
         catch (Exception e) { e.printStackTrace(); }
@@ -64,7 +64,7 @@ public class Transaction implements Datable
     }
 
     @Override
-    public byte[] getBytes()
+    public byte[] getHash()
     {
         return HashUtil.concatByteLists(
             this.sender.getEncoded(),

@@ -1,6 +1,6 @@
 package Trees.MerkleTree;
 
-import BlockChain.Blocks.Datable;
+import BlockChain.Blocks.Hashable;
 import BlockChain.StrData;//added only for debug purposes, remove with main
 import HashingUtility.HashUtil;
 import java.util.ArrayList;
@@ -25,14 +25,14 @@ public class MerkleTree
         return recursiveHashing(out);
     }
 
-    private static ArrayList<byte[]> getHashesArrayList(Iterable<? extends Datable> in)
+    private static ArrayList<byte[]> getHashesArrayList(Iterable<? extends Hashable> in)
     {
         ArrayList<byte[]> out = new ArrayList<>();
-        for(Datable n: in) { out.add(n.getHash()); }
+        for(Hashable n: in) { out.add(n.getHash()); }
         return out;
     }
 
-    public static byte[] getMerkleRoot(Iterable<? extends Datable> in)
+    public static byte[] getMerkleRoot(Iterable<? extends Hashable> in)
     {
         return recursiveHashing(getHashesArrayList(in));
     }

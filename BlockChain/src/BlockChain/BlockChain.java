@@ -8,7 +8,7 @@ public class BlockChain implements Iterable<Block>
 {
     KeyTree<Block, String> blocks;
 
-    public BlockChain(Datable initData)
+    public BlockChain(Hashable initData)
     {
         GenesisBlock genesis = new GenesisBlock(initData);
         this.blocks = new KeyTree<>(genesis, genesis.getHashAsString());

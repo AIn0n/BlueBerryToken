@@ -3,7 +3,7 @@ package Miner;
 import BlockChain.*;
 import BlockChain.Blocks.Block;
 import BlockChain.Blocks.StdBlock;
-import BlockChain.Blocks.Datable;
+import BlockChain.Blocks.Hashable;
 import HashingUtility.HashUtil;
 
 import java.security.*;
@@ -14,7 +14,7 @@ public class StandardMiner {
 
     public StandardMiner(PublicKey pk) { this.miner = pk; }
 
-    public StdBlock mine(Datable data, byte[] prevHash)
+    public StdBlock mine(Hashable data, byte[] prevHash)
     {
         StdBlock result = new StdBlock(data, prevHash, this.miner);
         byte[] hash = result.calculateHash();
