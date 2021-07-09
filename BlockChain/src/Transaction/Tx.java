@@ -3,24 +3,23 @@ package Transaction;
 import BlockChain.Blocks.Hashable;
 import HashingUtility.HashUtil;
 
-public class Tx implements Hashable
-{
+public class Tx implements Hashable {
     private final Iterable<TxIn> inputTx;
     private final Iterable<TxOut> outputTx;
+    private final byte[] hash;
 
-    public Tx(Iterable<TxIn> in, Iterable<TxOut> out)
-    {
+    public Tx(Iterable<TxIn> in, Iterable<TxOut> out) {
         this.inputTx = in;
         this.outputTx = out;
+        this.hash = calculateHash();
     }
 
     public Iterable<TxOut> getOutputTx() { return outputTx; }
 
-    public byte[] getBytes()
-    {
+    public byte[] getBytes() {
         byte[] result = new byte[0];
-        for(TxIn n: inputTx)     { result = HashUtil.concatTwoByteLists(result, n.getBytes()); }
-        for(TxOut n: outputTx)   { result = HashUtil.concatTwoByteLists(result, n.getBytes()); }
+        for (TxIn n : inputTx)      { result = HashUtil.concatTwoByteLists(result, n.getBytes()); }
+        for (TxOut n : outputTx)    { result = HashUtil.concatTwoByteLists(result, n.getBytes()); }
         return result;
     }
 
@@ -45,7 +44,9 @@ public class Tx implements Hashable
 
     @Override
     public byte[] getHash() {
-        return new byte[0];
+        return this.hash;
     }
+
+    public byte[] calculateHash() { return HashUtil.hash(getBytes()); }
 }
 

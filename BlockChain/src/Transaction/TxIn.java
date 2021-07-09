@@ -1,5 +1,6 @@
 package Transaction;
 
+import BlockChain.Blocks.Hashable;
 import HashingUtility.HashUtil;
 
 import java.security.PrivateKey;
@@ -7,7 +8,7 @@ import java.security.PublicKey;
 import java.security.Signature;
 import java.util.Arrays;
 
-class TxIn {
+class TxIn implements Hashable {
     private final byte[] prevOutHash;
     private final byte[] hash;
     private byte[] signature;
@@ -16,10 +17,10 @@ class TxIn {
     public TxIn(byte[] prevOutHash, long amount) {
         this.prevOutHash = prevOutHash;
         this.amount = amount;
-        this.hash = calculateHash();
+        this.hash = getHash();
     }
 
-    public byte[] calculateHash() {
+    public byte[] getHash() {
         return HashUtil.hash(getBytes());
     }
 

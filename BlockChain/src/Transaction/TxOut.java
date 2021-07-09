@@ -1,10 +1,11 @@
 package Transaction;
 
+import BlockChain.Blocks.Hashable;
 import HashingUtility.HashUtil;
 
 import java.security.PublicKey;
 
-class TxOut {
+class TxOut implements Hashable {
     private final PublicKey recipient;
     private final long amount;
     private final long index;

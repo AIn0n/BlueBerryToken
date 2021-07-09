@@ -7,9 +7,9 @@ import java.util.HashSet;
 
 public class Transactions implements Hashable
 {
-    private HashSet<Tx> transactions;
+    private final HashSet<Tx> transactions;
 
-    public Transactions() { this.transactions = new HashSet<>(1024); }
+    public Transactions() { this.transactions = new HashSet<>(); }
 
     public void add(Tx transaction)
     {
