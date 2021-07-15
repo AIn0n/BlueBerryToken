@@ -5,11 +5,11 @@ import HashingUtility.HashUtil;
 
 import java.security.PublicKey;
 
-class TxOut implements Hashable {
+public class TxOut implements Hashable {
     private final PublicKey recipient;
     private final long amount;
     private final long index;
-    private byte[] hash;
+    private final byte[] hash;
 
     public TxOut(PublicKey recipient, long amount, long index) {
         this.recipient = recipient;
@@ -26,19 +26,8 @@ class TxOut implements Hashable {
         );
     }
 
-    public byte[] calculateHash() {
-        return HashUtil.hash(getBytes());
-    }
-
-    public byte[] getHash() {
-        return hash;
-    }
-
-    public PublicKey getRecipient() {
-        return recipient;
-    }
-
-    public long getAmount() {
-        return amount;
-    }
+    public byte[] calculateHash() { return HashUtil.hash(getBytes()); }
+    public byte[] getHash() { return hash; }
+    public PublicKey getRecipient() { return recipient; }
+    public long getAmount() { return amount; }
 }

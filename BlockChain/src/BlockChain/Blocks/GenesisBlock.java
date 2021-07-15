@@ -21,5 +21,5 @@ public class GenesisBlock extends Block
     }
 
     @Override
-    public boolean verify() { return true; }
+    public boolean isHashValid() { return true; }
 }

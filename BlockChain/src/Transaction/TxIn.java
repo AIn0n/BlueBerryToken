@@ -6,9 +6,8 @@ import HashingUtility.HashUtil;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
-import java.util.Arrays;
 
-class TxIn implements Hashable {
+public class TxIn implements Hashable {
     private final byte[] prevOutHash;
     private final byte[] hash;
     private byte[] signature;
@@ -17,12 +16,16 @@ class TxIn implements Hashable {
     public TxIn(byte[] prevOutHash, long amount) {
         this.prevOutHash = prevOutHash;
         this.amount = amount;
-        this.hash = getHash();
+        this.hash = calculateHash();
     }
-
     public byte[] getHash() {
+        return this.hash;
+    }
+    public byte[] calculateHash() {
         return HashUtil.hash(getBytes());
     }
+
+    public byte[] getPrevOutHash() { return this.prevOutHash;}
 
     public byte[] getBytes() {
         return HashUtil.concatTwoByteLists(
@@ -31,26 +34,15 @@ class TxIn implements Hashable {
         );
     }
 
-    private boolean verifySignature(PublicKey pk) {
-        try {
+    public boolean verifySignature(PublicKey pk) {
+        try
+        {
             Signature dsa = Signature.getInstance("SHA1withDSA", "SUN");
             dsa.initVerify(pk);
-            dsa.update(getBytes());
+            dsa.update(HashUtil.concatTwoByteLists(getBytes(), hash));
             return dsa.verify(this.signature);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return false;
-    }
-
-    public boolean verify(PublicKey pk, Iterable<? extends Tx> transactions) {
-        for (Tx n : transactions) {
-            Iterable<TxOut> outs = n.getOutputTx();
-            for (TxOut m : outs) {
-                if (Arrays.equals(m.getHash(), this.prevOutHash))
-                    return verifySignature(m.getRecipient());
-            }
-        }
+        catch (Exception e) { e.printStackTrace(); }
         return false;
     }
 
@@ -60,9 +52,7 @@ class TxIn implements Hashable {
             dsa.initSign(sk);
             dsa.update(HashUtil.concatTwoByteLists(getBytes(), hash));
             this.signature = dsa.sign();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
     public long getAmount() { return amount; }

@@ -11,13 +11,23 @@ public class Transactions implements Hashable
 
     public Transactions() { this.transactions = new HashSet<>(); }
 
-    public void add(Tx transaction)
+    public Transactions(Tx tx)
     {
+        this.transactions = new HashSet<>();
+        this.transactions.add(tx);
+    }
+
+    public void add(Tx transaction) {
         this.transactions.add(transaction);
     }
 
     @Override
     public byte[] getHash() {
         return MerkleTree.getMerkleRoot(transactions);
+    }
+
+    public HashSet<Tx> getTxHashSet()
+    {
+        return this.transactions;
     }
 }

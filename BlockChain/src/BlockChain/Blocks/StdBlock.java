@@ -10,7 +10,6 @@ public class StdBlock extends Block
     private final byte[] prevHash;
     private final PublicKey miner;
     private long nonce = 0;
-    private final Hashable data;
 
     public StdBlock(Hashable data, byte[] prevHash, PublicKey miner)
     {
@@ -35,7 +34,7 @@ public class StdBlock extends Block
     }
 
     @Override
-    public boolean verify() { return Arrays.equals(calculateHash(), this.hash); }
+    public boolean isHashValid() { return Arrays.equals(calculateHash(), this.hash); }
 
     public String toString()
     {
