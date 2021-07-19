@@ -45,13 +45,23 @@ public class TransactionsValidator
         return true;
     }
 
+    public static HashSet<TxOut> getUnspentOuts(Iterable<Tx> txs)
+    {
+        HashSet<TxOut> outs = getAllOuts(txs);
+        HashSet<TxOut> unspentOuts = new HashSet<>(outs);
+        HashSet<TxIn> ins = getAllIns(txs);
+        for(TxIn in: ins)
+            unspentOuts.remove(findOutByHash(outs, in.getPrevOutHash()));
+
+        return unspentOuts;
+    }
+
     public static HashSet<TxOut> getAllOuts(Iterable<Tx> txs)
     {
         HashSet<TxOut> outs = new HashSet<>();
         for(Tx tx: txs)
-        {
             outs.addAll((Collection<? extends TxOut>) tx.getOuts());
-        }
+
         return outs;
     }
 
@@ -59,9 +69,8 @@ public class TransactionsValidator
     {
         HashSet<TxIn> ins = new HashSet<>();
         for(Tx tx: txs)
-        {
             ins.addAll((Collection<? extends TxIn>) tx.getIns());
-        }
+
         return ins;
     }
 

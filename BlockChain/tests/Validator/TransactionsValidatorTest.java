@@ -55,7 +55,7 @@ class TransactionsValidatorTest
 
     @DisplayName("Check Signatures and previous outputs for freshly initialized blockchain")
     @Test
-    public void checkSignAndOutsForFreshlyInitializedBlockchain()
+    public void checkSignAndOutsForFreshBlockchain()
     {
         assertTrue(
                 TransactionsValidator.areSignaturesAndPrevOutsValid(
@@ -69,6 +69,14 @@ class TransactionsValidatorTest
         assertTrue(
                 TransactionsValidator.areBalancesValid(
                         TransactionsValidator.getAllTransactions(bc)));
+    }
+
+    @DisplayName("Check get unspent outs for freshly initialized blockchain")
+    @Test
+    public void CheckGetUnspentOutsForFreshBlockchain()
+    {
+        HashSet<TxOut> unspent = TransactionsValidator.getUnspentOuts(TransactionsValidator.getAllTransactions(bc));
+        assertEquals(toNewcomersOuts, unspent);
     }
 
     @DisplayName("Check balance, signatures and outs for blockchain with new, valid transaction")
