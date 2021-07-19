@@ -1,7 +1,7 @@
-package Miner;
+package core;
 
-import BlockChain.Blocks.StdBlock;
-import BlockChain.Blocks.Hashable;
+import core.BlockChain.Blocks.StdBlock;
+import core.BlockChain.Blocks.Hashable;
 
 public class MinimalMiner
 {

@@ -1,8 +1,8 @@
 package Wallet;
 
-import BlockChain.BlockChain;
-import BlockChain.Blocks.StdBlock;
-import Miner.MinimalMiner;
+import core.BlockChain.BlockChain;
+import core.BlockChain.Blocks.StdBlock;
+import core.MinimalMiner;
 import Transaction.Transactions;
 import Transaction.Tx;
 

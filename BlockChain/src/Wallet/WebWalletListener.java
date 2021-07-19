@@ -1,7 +1,6 @@
 package Wallet;
 
-import BlockChain.BlockChain;
-import BlockChain.Blocks.Block;
+import core.BlockChain.BlockChain;
 import Transaction.Tx;
 
 public class WebWalletListener implements WalletListener {

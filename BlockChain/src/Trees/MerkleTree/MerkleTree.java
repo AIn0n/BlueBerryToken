@@ -1,8 +1,8 @@
 package Trees.MerkleTree;
 
-import BlockChain.Blocks.Hashable;
-import BlockChain.StrData;//added only for debug purposes, remove with main
-import HashingUtility.HashUtil;
+import core.BlockChain.Blocks.Hashable;
+import core.BlockChain.StrData;//added only for debug purposes, remove with main
+import core.HashUtil;
 import java.util.ArrayList;
 
 public class MerkleTree

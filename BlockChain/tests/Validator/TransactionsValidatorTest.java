@@ -1,7 +1,7 @@
 package Validator;
 
-import BlockChain.BlockChain;
-import Miner.MinimalMiner;
+import core.BlockChain.BlockChain;
+import core.MinimalMiner;
 import Transaction.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

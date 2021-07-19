@@ -1,7 +1,7 @@
-package BlockChain;
+package core.BlockChain;
 
-import BlockChain.Blocks.Hashable;
-import HashingUtility.HashUtil;
+import core.BlockChain.Blocks.Hashable;
+import core.HashUtil;
 
 //testing only class - not for production code
 public class StrData implements Hashable {

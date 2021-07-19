@@ -1,7 +1,7 @@
 package Transaction;
 
-import BlockChain.Blocks.Hashable;
-import HashingUtility.HashUtil;
+import core.BlockChain.Blocks.Hashable;
+import core.HashUtil;
 
 import java.util.HashSet;
 

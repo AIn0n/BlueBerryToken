@@ -1,6 +1,6 @@
 package Wallet;
 
-import BlockChain.BlockChain;
+import core.BlockChain.BlockChain;
 import Transaction.*;
 import Validator.TransactionsValidator;
 

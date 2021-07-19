@@ -1,12 +1,13 @@
 package Miner;
 
-import BlockChain.BlockChain;
-import BlockChain.Blocks.StdBlock;
+import core.BlockChain.BlockChain;
+import core.BlockChain.Blocks.StdBlock;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import BlockChain.Blocks.Hashable;
-import HashingUtility.HashUtil;
+import core.BlockChain.Blocks.Hashable;
+import core.HashUtil;
+import core.MinimalMiner;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

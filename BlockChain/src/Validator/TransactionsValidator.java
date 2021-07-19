@@ -1,7 +1,7 @@
 package Validator;
 
-import BlockChain.BlockChain;
-import BlockChain.Blocks.Block;
+import core.BlockChain.BlockChain;
+import core.BlockChain.Blocks.Block;
 import Transaction.*;
 import java.util.*;
 
@@ -58,7 +58,7 @@ public class TransactionsValidator
     {
         HashSet<TxOut> outs = new HashSet<>();
         for(Tx tx: txs)
-            outs.addAll((Collection<? extends TxOut>) tx.getOuts());
+            outs.addAll(tx.getOuts());
 
         return outs;
     }
@@ -67,7 +67,7 @@ public class TransactionsValidator
     {
         HashSet<TxIn> ins = new HashSet<>();
         for(Tx tx: txs)
-            ins.addAll((Collection<? extends TxIn>) tx.getIns());
+            ins.addAll(tx.getIns());
 
         return ins;
     }

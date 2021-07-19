@@ -1,8 +1,8 @@
-package BlockChain.Blocks;
+package core.BlockChain.Blocks;
 
 import java.util.Arrays;
 
-import HashingUtility.HashUtil;
+import core.HashUtil;
 
 public class StdBlock extends Block
 {

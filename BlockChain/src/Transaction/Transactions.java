@@ -1,6 +1,6 @@
 package Transaction;
 
-import BlockChain.Blocks.Hashable;
+import core.BlockChain.Blocks.Hashable;
 import Trees.MerkleTree.MerkleTree;
 
 import java.util.HashSet;

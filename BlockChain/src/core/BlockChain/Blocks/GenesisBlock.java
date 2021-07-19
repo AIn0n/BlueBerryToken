@@ -1,6 +1,6 @@
-package BlockChain.Blocks;
+package core.BlockChain.Blocks;
 
-import HashingUtility.HashUtil;
+import core.HashUtil;
 
 public class GenesisBlock extends Block
 {

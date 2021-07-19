@@ -1,6 +1,6 @@
-package BlockChain;
+package core.BlockChain;
 
-import BlockChain.Blocks.*;
+import core.BlockChain.Blocks.*;
 import Trees.KeyTree.KeyTree;
 import java.util.Iterator;
 

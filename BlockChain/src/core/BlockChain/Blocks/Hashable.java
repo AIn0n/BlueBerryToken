@@ -1,4 +1,4 @@
-package BlockChain.Blocks;
+package core.BlockChain.Blocks;
 
 import java.io.Serializable;
 

@@ -1,7 +1,7 @@
 package Validator;
 
-import BlockChain.BlockChain;
-import BlockChain.Blocks.Block;
+import core.BlockChain.BlockChain;
+import core.BlockChain.Blocks.Block;
 
 public class BlockchainValidator {
     public static boolean BlockchainValidateHashes(BlockChain bc)
