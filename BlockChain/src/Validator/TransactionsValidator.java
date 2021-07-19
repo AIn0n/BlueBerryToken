@@ -18,8 +18,9 @@ public class TransactionsValidator
 {
     public static boolean areBalancesValid(Iterable<Tx> txs)
     {
-        for (Tx tx : txs) if(!tx.isBalanceValid()) return false;
-        return true;
+        int invalidBalances = 0;
+        for (Tx tx : txs) if(!tx.isBalanceValid()) invalidBalances++;
+        return invalidBalances == 1;
     }
 
     public static TxOut findOutByHash(Iterable<TxOut> outs, byte[] hash) throws NoSuchElementException
