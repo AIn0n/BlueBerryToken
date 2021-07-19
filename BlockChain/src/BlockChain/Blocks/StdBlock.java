@@ -1,6 +1,5 @@
 package BlockChain.Blocks;
 
-import java.security.PublicKey;
 import java.util.Arrays;
 
 import HashingUtility.HashUtil;
@@ -8,21 +7,18 @@ import HashingUtility.HashUtil;
 public class StdBlock extends Block
 {
     private final byte[] prevHash;
-    private final PublicKey miner;
     private long nonce = 0;
 
-    public StdBlock(Hashable data, byte[] prevHash, PublicKey miner)
+    public StdBlock(Hashable data, byte[] prevHash)
     {
         this.data = data;
         this.prevHash = prevHash;
-        this.miner = miner;
     }
 
     private byte[] convertToBytes()
     {
         return HashUtil.concatByteLists(
             HashUtil.longToByteList(this.nonce),
-            this.miner.getEncoded(),
             this.data.getHash(),
             this.prevHash
         );
@@ -47,4 +43,5 @@ public class StdBlock extends Block
     public void setNonce(long nonce) {this.nonce = nonce;}
 
     public String getPrevHashAsString() { return HashUtil.byteListToString(this.prevHash);}
+    public byte[] getPrevHash() { return this.prevHash;}
 }

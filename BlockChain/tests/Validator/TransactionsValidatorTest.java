@@ -1,7 +1,7 @@
 package Validator;
 
 import BlockChain.BlockChain;
-import Miner.StandardMiner;
+import Miner.MinimalMiner;
 import Transaction.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -46,8 +46,7 @@ class TransactionsValidatorTest
         }};
 
         //adding and mining transaction from owner to every newcomer
-        StandardMiner miner = new StandardMiner(keyPairs[0].getPublic());
-        bc.add(miner.mine(new Transactions(new Tx(
+        bc.add(MinimalMiner.mine(new Transactions(new Tx(
                 new HashSet<TxIn>(){{add(fromOwnerIn);}},
                 toNewcomersOuts)), bc.last().getHash()));
         //at the end we have fully initialized blockchain ready for tests!
