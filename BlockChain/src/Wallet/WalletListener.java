@@ -6,7 +6,7 @@ import Transaction.Tx;
 
 public interface WalletListener
 {
-    Block getBlock();
     BlockChain getBlockChain();
     void sendTx(Tx tx);
+    byte[] getLastBlockHash();
 }

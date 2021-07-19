@@ -3,8 +3,11 @@ package Wallet;
 import BlockChain.BlockChain;
 import BlockChain.Blocks.Block;
 import Transaction.Transactions;
+import Transaction.TxOut;
+import Validator.TransactionsValidator;
 
 import java.security.KeyPair;
+import java.util.HashSet;
 
 public class Wallet
 {
@@ -21,6 +24,7 @@ public class Wallet
 
     public void updateBalance()
     {
+        HashSet<TxOut> unspent = TransactionsValidator.getUnspentOuts(TransactionsValidator.getAllTransactions(blockChain));
     }
 
     public static void main(String[] args)

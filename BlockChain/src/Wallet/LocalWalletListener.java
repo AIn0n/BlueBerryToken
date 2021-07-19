@@ -1,23 +1,25 @@
 package Wallet;
 
 import BlockChain.BlockChain;
-import BlockChain.Blocks.Block;
 import Transaction.Tx;
 
-public class WebWalletListener implements WalletListener {
+public class LocalWalletListener implements WalletListener
+{
+    private final BlockChain blockChain;
+
+    public LocalWalletListener(BlockChain bc) { this.blockChain = bc; }
 
     @Override
     public BlockChain getBlockChain() {
-        return null;
+        return blockChain;
     }
 
     @Override
     public void sendTx(Tx tx) {
-
     }
 
     @Override
     public byte[] getLastBlockHash() {
-        return new byte[0];
+        return blockChain.last().getHash();
     }
 }
