@@ -4,7 +4,6 @@ import BlockChain.BlockChain;
 import Miner.MinimalMiner;
 import Transaction.*;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -76,13 +75,5 @@ class TransactionsValidatorTest
     {
         HashSet<TxOut> unspent = TransactionsValidator.getUnspentOuts(TransactionsValidator.getAllTransactions(bc));
         assertEquals(toNewcomersOuts, unspent);
-    }
-
-    @DisplayName("Check balance, signatures and outs for blockchain with new, valid transaction")
-    @Disabled("Not Finished yet")
-    public void CheckBalancesAndSingsForNewValidTransactionInBc()
-    {
-        KeyPair sender = keyPairs[0];
-        KeyPair recipient = keyPairs[1];
     }
 }

@@ -6,6 +6,7 @@ import Transaction.Transactions;
 import Transaction.Tx;
 import Transaction.TxIn;
 import Transaction.TxOut;
+import Validator.TransactionsValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -67,5 +68,20 @@ class WalletTest {
             wallet.updateBalance();
             assertEquals(givingAwayBalance, wallet.getBalance());
         }
+    }
+
+    @DisplayName("check function for sending tokens in fresh blockchain")
+    @Test
+    public void checkTokenSendFunction()
+    {
+        Wallet sender = new Wallet(listener, keyPairs[1]);
+        Wallet receiver = new Wallet(listener, keyPairs[2]);
+        sender.sendTokens(receiver.getKeys().getPublic(), 100);
+        receiver.updateBalance();
+        sender.updateBalance();
+        assertEquals(givingAwayBalance+100, receiver.getBalance());
+        assertEquals(givingAwayBalance-100, sender.getBalance());
+
+        assertTrue(TransactionsValidator.validate(listener.getBlockChain()));
     }
 }

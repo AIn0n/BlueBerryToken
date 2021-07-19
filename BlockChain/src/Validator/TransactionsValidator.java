@@ -7,6 +7,12 @@ import java.util.*;
 
 public class TransactionsValidator
 {
+    public static boolean validate(BlockChain bc)
+    {
+        Iterable<Tx> txs = getAllTransactions(bc);
+        return areSignaturesAndPrevOutsValid(txs) && areBalancesValid(txs);
+    }
+
     public static boolean areBalancesValid(Iterable<Tx> txs)
     {
         int invalidBalances = 0;
