@@ -27,16 +27,24 @@ public class BlueBerryInit {
         return keys;
     }
 
+    public static BlockChain initBcWithTxOut(TxOut out)
+    {
+        return new BlockChain(new Transactions(new Tx(
+                new HashSet<>(),
+                new HashSet<TxOut>() {{ add(out);}})));
+    }
+
     public static BlockChain generateBlockChain(KeyPair owner, ArrayList<KeyPair> keys, long startBalance)
     {
         Random rng = new Random();
+        //first transaction in blockchain, total amount of tokens, all goes into owner
         TxOut firstTx = new TxOut(owner.getPublic(), startBalance * keys.size(), rng.nextLong());
-        BlockChain bc = new BlockChain(new Transactions(new Tx(
-                new HashSet<>(),
-                new HashSet<TxOut>() {{ add(firstTx);}})));
+        BlockChain bc = initBcWithTxOut(firstTx);
 
         TxIn fromOwnerIn = new TxIn(firstTx.getHash(), firstTx.getAmount());
         fromOwnerIn.sign(owner.getPrivate());
+
+        //next transaction is giving away tokens from owner to newcomers
         HashSet<TxOut> toNewcomersOuts = new HashSet<>();
         for(KeyPair key: keys)
             toNewcomersOuts.add(new TxOut(key.getPublic(), startBalance, rng.nextLong()));
