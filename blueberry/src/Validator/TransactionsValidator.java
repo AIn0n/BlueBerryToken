@@ -10,7 +10,7 @@ public class TransactionsValidator
     public static boolean validate(BlockChain bc)
     {
         Iterable<Tx> txs = getAllTransactions(bc);
-        return areSignaturesAndPrevOutsValid(txs) && areBalancesValid(txs);
+        return areSignaturesAndPrevOutsValid(txs) && isTotalBalanceValid(txs, bc);
     }
 
     public static boolean areBalancesValid(Iterable<Tx> txs)
@@ -20,11 +20,23 @@ public class TransactionsValidator
         return invalidBalances == 1;
     }
 
-    public static TxOut findOutByHash(Iterable<TxOut> outs, byte[] hash) throws NoSuchElementException
+    public static boolean isTotalBalanceValid(Iterable<Tx> txs, BlockChain bc)
     {
-        for(TxOut out: outs)
-            if(Arrays.equals(out.getHash(), hash)) return out;
-        throw new NoSuchElementException();
+        HashSet<TxOut> outs = getAllOuts(txs);
+        HashSet<TxIn> ins = getAllIns(txs);
+        HashMap<TxOut, Long> outsBalance = new HashMap<>();
+        for(TxIn in: ins)
+        {
+            try {
+                TxOut prevOut = findOutByHash(outs, in.getPrevOutHash());
+                Long val = outsBalance.containsKey(prevOut) ?
+                        outsBalance.get(prevOut) - in.getAmount() :
+                        prevOut.getAmount();
+                outsBalance.put(prevOut, val);
+            } catch (NoSuchElementException e) { return  false; }
+        }
+        long totalBalance = outsBalance.values().stream().mapToLong(Long::longValue).sum();
+        return -totalBalance == findInitTransaction(bc).getOutSum();
     }
 
     public static boolean areSignaturesAndPrevOutsValid(Iterable<Tx> txs)
@@ -41,6 +53,19 @@ public class TransactionsValidator
             catch (NoSuchElementException e) { return false; }
         }
         return true;
+    }
+
+    public static Tx findInitTransaction(BlockChain bc)
+    {
+        Transactions initTransactions = (Transactions) bc.first().getData();
+        return new ArrayList<>(initTransactions.getTxHashSet()).get(0);
+    }
+
+    public static TxOut findOutByHash(Iterable<TxOut> outs, byte[] hash) throws NoSuchElementException
+    {
+        for(TxOut out: outs)
+            if(Arrays.equals(out.getHash(), hash)) return out;
+        throw new NoSuchElementException();
     }
 
     public static HashSet<TxOut> getUnspentOuts(Iterable<Tx> txs)

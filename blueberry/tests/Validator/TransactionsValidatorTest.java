@@ -14,6 +14,7 @@ import java.security.*;
 import java.util.ArrayList;
 
 import java.util.HashSet;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,26 +23,33 @@ class TransactionsValidatorTest
     private BlockChain bc;
     public int numOfNewcomers = 4;
     public long givingAwayBalance = 1000;
+    public Tx firstTx;
     public HashSet<TxOut> toNewcomersOuts;
+    public ArrayList<TxOut> newcomersOutsArr = new ArrayList<>();
     public ArrayList<KeyPair> keys;
     public LocalWalletListener listener;
     @BeforeEach
     public void setUp() throws NoSuchProviderException, NoSuchAlgorithmException
     {
+        Random rng = new Random();
         //lets assume that first keys are belong to crypto owner - rest to the newcomers
         keys = BlueBerryInit.generateKeyPairs(numOfNewcomers+1);
         KeyPair owner = keys.remove(0);
 
-        TxOut firstTx = new TxOut(owner.getPublic(), givingAwayBalance * numOfNewcomers, 0);
-        bc = BlueBerryInit.initBcWithTxOut(firstTx);
+        TxOut firstTxOut = new TxOut(owner.getPublic(), givingAwayBalance * numOfNewcomers, rng.nextLong());
+        firstTx = new Tx(
+                new HashSet<>(),
+                new HashSet<TxOut>() {{ add(firstTxOut);}});
+        bc = new BlockChain(new Transactions(firstTx));
 
         //next transaction is giving away tokens from owner to newcomers
-        TxIn fromOwnerIn = new TxIn(firstTx.getHash(), firstTx.getAmount());
+        TxIn fromOwnerIn = new TxIn(firstTxOut.getHash(), firstTxOut.getAmount());
         fromOwnerIn.sign(owner.getPrivate());
-        toNewcomersOuts = new HashSet<TxOut>(){{
-            for (int i = 0; i < keys.size(); i++)
-                add(new TxOut(keys.get(i).getPublic(), givingAwayBalance, i + 1));
-        }};
+        for(KeyPair kp: keys)
+        {
+            newcomersOutsArr.add(new TxOut(kp.getPublic(), givingAwayBalance, rng.nextLong()));
+        }
+        toNewcomersOuts = new HashSet<>(newcomersOutsArr);
 
         //adding and mining transaction from owner to every newcomer
         bc.add(MinimalMiner.mine(new Transactions(new Tx(
@@ -83,6 +91,46 @@ class TransactionsValidatorTest
     {
         Wallet wallet = new Wallet(listener, keys.get(0));
         wallet.sendTokens(keys.get(1).getPublic(), givingAwayBalance*100);
+        assertFalse(TransactionsValidator.validate(bc));
+    }
+
+    @DisplayName("check getting init transaction from blockchain")
+    @Test
+    public void checkFindInitTransaction()
+    {
+        assertEquals(firstTx, TransactionsValidator.findInitTransaction(bc));
+    }
+
+    @DisplayName("check validation with invalid prevOut in TxIn")
+    @Test
+    public void CheckValidationForInvalidTxOutInTxIn()
+    {
+        TxIn in = new TxIn(newcomersOutsArr.get(0).getHash(), 2000);
+        in.sign(keys.get(0).getPrivate());
+        bc.add(MinimalMiner.mine(new Transactions(
+                new Tx(
+                        new HashSet<TxIn>(){{add(in);}},
+                        new HashSet<TxOut>(){{add(new TxOut(keys.get(0).getPublic(),2000, 23));}})),
+                bc.last().getHash()));
+        assertFalse(TransactionsValidator.validate(bc));
+    }
+
+    @DisplayName("check two times used txOut case")
+    @Test
+    public void checkValidationForReusedOuts()
+    {
+        TxIn in = new TxIn(newcomersOutsArr.get(0).getHash(), 1000);
+        in.sign(keys.get(0).getPrivate());
+        bc.add(MinimalMiner.mine(new Transactions(
+                        new Tx(
+                                new HashSet<TxIn>(){{add(in);}},
+                                new HashSet<TxOut>(){{add(new TxOut(keys.get(0).getPublic(),1000, 23));}})),
+                bc.last().getHash()));
+        bc.add(MinimalMiner.mine(new Transactions(
+                        new Tx(
+                                new HashSet<TxIn>(){{add(in);}},
+                                new HashSet<TxOut>(){{add(new TxOut(keys.get(0).getPublic(),1000, 23));}})),
+                bc.last().getHash()));
         assertFalse(TransactionsValidator.validate(bc));
     }
 }

@@ -26,25 +26,25 @@ public class Tx implements Hashable {
         return result;
     }
 
-    private long getInSum() throws Exception
+    public long getInSum() throws IllegalArgumentException
     {
         long inSum = 0;
         for(TxIn n: this.ins)
         {
             long amount = n.getAmount();
-            if(amount <= 0) throw new Exception();
+            if(amount <= 0) throw new IllegalArgumentException();
             inSum += amount;
         }
         return inSum;
     }
 
-    private long getOutSum() throws Exception
+    public long getOutSum() throws IllegalArgumentException
     {
         long outSum = 0;
         for(TxOut n: this.outs)
         {
             long amount = n.getAmount();
-            if(amount <= 0) throw new Exception();
+            if(amount <= 0) throw new IllegalArgumentException();
             outSum += amount;
         }
         return outSum;
@@ -53,7 +53,7 @@ public class Tx implements Hashable {
     public boolean isBalanceValid()
     {
         try { return getInSum() == getOutSum(); }
-        catch (Exception e) { return false; }
+        catch (IllegalArgumentException e) { return false; }
     }
 
     @Override

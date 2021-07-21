@@ -45,6 +45,8 @@ public class KeyTree<G, T extends Comparable<T>> implements Iterable<G>
         getNodeWithKey(parentKey).addChild(new Node<>(data, childKey));
     }
 
+    public G getRootData() {return root.getData();}
+
     public G getLastData()
     {
         G result = this.root.getData();

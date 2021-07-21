@@ -22,4 +22,5 @@ public class BlockChain implements Iterable<Block>
         catch(Exception e) { e.printStackTrace(); }
     }
     public Block last() { return this.blocks.getLastData(); }
+    public Block first() { return this.blocks.getRootData(); }
 }
