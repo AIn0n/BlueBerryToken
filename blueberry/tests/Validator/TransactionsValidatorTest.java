@@ -1,6 +1,8 @@
 package Validator;
 
 import InitBlueBerryToken.BlueBerryInit;
+import Wallet.Wallet;
+import Wallet.LocalWalletListener;
 import core.BlockChain.BlockChain;
 import core.MinimalMiner;
 import Transaction.*;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.security.*;
 import java.util.ArrayList;
+
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,11 +23,13 @@ class TransactionsValidatorTest
     public int numOfNewcomers = 4;
     public long givingAwayBalance = 1000;
     public HashSet<TxOut> toNewcomersOuts;
+    public ArrayList<KeyPair> keys;
+    public LocalWalletListener listener;
     @BeforeEach
     public void setUp() throws NoSuchProviderException, NoSuchAlgorithmException
     {
         //lets assume that first keys are belong to crypto owner - rest to the newcomers
-        ArrayList<KeyPair> keys = BlueBerryInit.generateKeyPairs(numOfNewcomers+1);
+        keys = BlueBerryInit.generateKeyPairs(numOfNewcomers+1);
         KeyPair owner = keys.remove(0);
 
         TxOut firstTx = new TxOut(owner.getPublic(), givingAwayBalance * numOfNewcomers, 0);
@@ -43,6 +48,7 @@ class TransactionsValidatorTest
                 new HashSet<TxIn>(){{add(fromOwnerIn);}},
                 toNewcomersOuts)), bc.last().getHash()));
         //at the end we have fully initialized blockchain ready for tests!
+        listener = new LocalWalletListener(bc);
     }
 
     @DisplayName("Check Signatures and previous outputs for freshly initialized blockchain")
@@ -69,5 +75,14 @@ class TransactionsValidatorTest
     {
         HashSet<TxOut> unspent = TransactionsValidator.getUnspentOuts(TransactionsValidator.getAllTransactions(bc));
         assertEquals(toNewcomersOuts, unspent);
+    }
+
+    @DisplayName("check validate function with new, invalid transaction")
+    @Test
+    public void checkValidationForIncorrectBalance()
+    {
+        Wallet wallet = new Wallet(listener, keys.get(0));
+        wallet.sendTokens(keys.get(1).getPublic(), givingAwayBalance*100);
+        assertFalse(TransactionsValidator.validate(bc));
     }
 }
