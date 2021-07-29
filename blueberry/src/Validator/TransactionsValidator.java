@@ -3,6 +3,7 @@ package Validator;
 import core.BlockChain.BlockChain;
 import core.BlockChain.Blocks.Block;
 import Transaction.*;
+
 import java.util.*;
 
 public class TransactionsValidator
@@ -10,45 +11,31 @@ public class TransactionsValidator
     public static boolean validate(BlockChain bc)
     {
         Iterable<Tx> txs = getAllTransactions(bc);
-        return areSignaturesAndPrevOutsValid(txs) && isTotalBalanceValid(txs, bc);
+        ArrayList<TxOut> outs = getAllOuts(txs);
+        ArrayList<TxIn> ins = getAllIns(txs);
+        return areSignaturesAndOutsValid(ins, outs) && areInnerBalancesValid(txs);
     }
 
-    public static boolean areBalancesValid(Iterable<Tx> txs)
+    public static boolean areInnerBalancesValid(Iterable<Tx> txs)
     {
         int invalidBalances = 0;
         for (Tx tx : txs) if(!tx.isBalanceValid()) invalidBalances++;
         return invalidBalances == 1;
     }
 
-    public static boolean isTotalBalanceValid(Iterable<Tx> txs, BlockChain bc)
+    public static boolean areSignaturesAndOutsValid(ArrayList<TxIn> ins, ArrayList<TxOut> outs)
     {
-        HashSet<TxOut> outs = getAllOuts(txs);
-        HashSet<TxIn> ins = getAllIns(txs);
-        HashMap<TxOut, Long> outsBalance = new HashMap<>();
-        for(TxIn in: ins)
-        {
-            try {
-                TxOut prevOut = findOutByHash(outs, in.getPrevOutHash());
-                Long val = outsBalance.containsKey(prevOut) ?
-                        outsBalance.get(prevOut) - in.getAmount() :
-                        prevOut.getAmount();
-                outsBalance.put(prevOut, val);
-            } catch (NoSuchElementException e) { return  false; }
-        }
-        long totalBalance = outsBalance.values().stream().mapToLong(Long::longValue).sum();
-        return -totalBalance == findInitTransaction(bc).getOutSum();
-    }
-
-    public static boolean areSignaturesAndPrevOutsValid(Iterable<Tx> txs)
-    {
-        HashSet<TxOut> outs = getAllOuts(txs);
-        HashSet<TxIn> ins = getAllIns(txs);
+        ArrayList<byte[]> occurredOutHashes = new ArrayList<>();
         for(TxIn in: ins)
         {
             try
             {
-                if(!in.verifySignature(findOutByHash(outs, in.getPrevOutHash()).getRecipient()))
-                    return false;
+                byte[] prevOutHash = in.getPrevOutHash();
+                TxOut prevOut = findOutByHash(outs, prevOutHash);
+                if(!in.verifySignature(prevOut.getRecipient())  ||
+                        occurredOutHashes.contains(prevOutHash) ||
+                        prevOut.getAmount() != in.getAmount()) return false;
+                occurredOutHashes.add(prevOutHash);
             }
             catch (NoSuchElementException e) { return false; }
         }
@@ -70,27 +57,27 @@ public class TransactionsValidator
 
     public static HashSet<TxOut> getUnspentOuts(Iterable<Tx> txs)
     {
-        HashSet<TxOut> outs = getAllOuts(txs);
+        ArrayList<TxOut> outs = getAllOuts(txs);
+        ArrayList<TxIn> ins = getAllIns(txs);
         HashSet<TxOut> unspentOuts = new HashSet<>(outs);
-        HashSet<TxIn> ins = getAllIns(txs);
         for(TxIn in: ins)
             unspentOuts.remove(findOutByHash(outs, in.getPrevOutHash()));
 
         return unspentOuts;
     }
 
-    public static HashSet<TxOut> getAllOuts(Iterable<Tx> txs)
+    public static ArrayList<TxOut> getAllOuts(Iterable<Tx> txs)
     {
-        HashSet<TxOut> outs = new HashSet<>();
+        ArrayList<TxOut> outs = new ArrayList<>();
         for(Tx tx: txs)
             outs.addAll(tx.getOuts());
 
         return outs;
     }
 
-    public static HashSet<TxIn> getAllIns(Iterable<Tx> txs)
+    public static ArrayList<TxIn> getAllIns(Iterable<Tx> txs)
     {
-        HashSet<TxIn> ins = new HashSet<>();
+        ArrayList<TxIn> ins = new ArrayList<>();
         for(Tx tx: txs)
             ins.addAll(tx.getIns());
 

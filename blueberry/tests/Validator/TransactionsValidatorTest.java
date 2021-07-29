@@ -59,22 +59,11 @@ class TransactionsValidatorTest
         listener = new LocalWalletListener(bc);
     }
 
-    @DisplayName("Check Signatures and previous outputs for freshly initialized blockchain")
+    @DisplayName("validate for freshly initialized blockchain")
     @Test
-    public void checkSignAndOutsForFreshBlockchain()
+    public void validateFreshBc()
     {
-        assertTrue(
-                TransactionsValidator.areSignaturesAndPrevOutsValid(
-                        TransactionsValidator.getAllTransactions(bc)));
-    }
-
-    @DisplayName("Check balance for freshly initialized blockchain")
-    @Test
-    public void checkBalancesForFreshlyInitializedBlockchain()
-    {
-        assertTrue(
-                TransactionsValidator.areBalancesValid(
-                        TransactionsValidator.getAllTransactions(bc)));
+        assertTrue(TransactionsValidator.validate(bc));
     }
 
     @DisplayName("Check get unspent outs for freshly initialized blockchain")
@@ -94,6 +83,16 @@ class TransactionsValidatorTest
         assertFalse(TransactionsValidator.validate(bc));
     }
 
+    @DisplayName("valid transaction added to blockchain, should pass")
+    @Test
+    public void validTransactionCase()
+    {
+        Wallet wallet = new Wallet(listener, keys.get(0));
+        wallet.sendTokens(keys.get(1).getPublic(), givingAwayBalance);
+        assertTrue(TransactionsValidator.validate(bc));
+    }
+
+
     @DisplayName("check getting init transaction from blockchain")
     @Test
     public void checkFindInitTransaction()
@@ -110,7 +109,7 @@ class TransactionsValidatorTest
         bc.add(MinimalMiner.mine(new Transactions(
                 new Tx(
                         new HashSet<TxIn>(){{add(in);}},
-                        new HashSet<TxOut>(){{add(new TxOut(keys.get(0).getPublic(),2000, 23));}})),
+                        new HashSet<TxOut>(){{add(new TxOut(keys.get(1).getPublic(),2000, 23));}})),
                 bc.last().getHash()));
         assertFalse(TransactionsValidator.validate(bc));
     }
@@ -124,12 +123,34 @@ class TransactionsValidatorTest
         bc.add(MinimalMiner.mine(new Transactions(
                         new Tx(
                                 new HashSet<TxIn>(){{add(in);}},
-                                new HashSet<TxOut>(){{add(new TxOut(keys.get(0).getPublic(),1000, 23));}})),
+                                new HashSet<TxOut>(){{add(new TxOut(keys.get(1).getPublic(),1000, 23));}})),
                 bc.last().getHash()));
         bc.add(MinimalMiner.mine(new Transactions(
                         new Tx(
                                 new HashSet<TxIn>(){{add(in);}},
-                                new HashSet<TxOut>(){{add(new TxOut(keys.get(0).getPublic(),1000, 23));}})),
+                                new HashSet<TxOut>(){{add(new TxOut(keys.get(1).getPublic(),1000, 23));}})),
+                bc.last().getHash()));
+        System.out.println(TransactionsValidator.getAllIns(TransactionsValidator.getAllTransactions(bc)).size());
+        assertFalse(TransactionsValidator.validate(bc));
+    }
+
+    @DisplayName("test with invalid balance which sum into zero")
+    @Test
+    public void checkValidationForInvalidBalanceEqZero()
+    {
+        TxIn in = new TxIn(newcomersOutsArr.get(0).getHash(), 500);
+        in.sign(keys.get(0).getPrivate());
+        bc.add(MinimalMiner.mine(new Transactions(
+                        new Tx(
+                                new HashSet<TxIn>(){{add(in);}},
+                                new HashSet<TxOut>(){{add(new TxOut(keys.get(3).getPublic(),250, 23));}})),
+                bc.last().getHash()));
+        TxIn in1 = new TxIn(newcomersOutsArr.get(2).getHash(), 250);
+        in1.sign(keys.get(2).getPrivate());
+        bc.add(MinimalMiner.mine(new Transactions(
+                        new Tx(
+                                new HashSet<TxIn>(){{add(in1);}},
+                                new HashSet<TxOut>(){{add(new TxOut(keys.get(1).getPublic(),500, 23));}})),
                 bc.last().getHash()));
         assertFalse(TransactionsValidator.validate(bc));
     }
